@@ -1,0 +1,693 @@
+<?php
+
+function reposi_install() {
+  $arol[] = array(100, t('Teacher'), NULL);
+  $arol[] = array(101, t('Student'), NULL);
+  $arol[] = array(102, t('Student and Teacher'), NULL);
+
+  foreach ($arol as $record) {
+    db_insert('reposi_academic')->fields(array(
+      'academic_id'   => $record[0],
+      'academic_type' => $record[1],
+      'academic_uid'  => $record[2],
+    ))->execute();
+  }
+  $stat[] = array(1, 'Active', NULL);
+  $stat[] = array(2, 'Inactive', NULL);
+
+  foreach ($stat as $record) {
+    db_insert('reposi_state')->fields(array(
+      'state_id'  => $record[0],
+      's_type'    => $record[1],
+      's_uid'     => $record[2],
+    ))->execute();
+  }
+}
+
+
+function reposi_schema() {
+    $schema['reposi_user'] = array(
+      'description' => 'Repository user data',
+      'fields' => array(
+        'uid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'User ID',
+        ),
+        'u_first_name' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'User first name',
+        ),
+        'u_second_name' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'User second name',
+        ),
+        'u_first_lastname' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'User first last name',
+        ),
+        'u_second_lastname' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'User second last name',
+        ),
+        'u_affiliation' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Institution to belongs',
+        ),
+        'u_email' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Institutional email',
+        ),
+        'u_optional_email_1' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Additional email',
+        ),
+        'u_optional_email_2' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Additional email',
+        ),
+        'u_id_homonymous' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'u_id_scopus' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+      ),
+    'primary key' => array('uid'),);
+
+    $schema['reposi_article_book'] = array(
+      'fields' => array(
+        'abid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'Publication ID',
+        ),
+        'ab_type' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Article or book',
+        ),
+        'ab_title' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => TRUE,
+          'description' => 'Publication Title',
+        ),
+        'ab_subtitle_chapter' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+          'description' => 'Subtitle (book) or chapter (chapter book)',
+        ),
+        'ab_chapter' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => 'Chapter number',
+        ),
+        'ab_abstract' => array(
+          'type' => 'text',
+          'not null' => FALSE,
+          'description' => 'Abstract or description',
+        ),
+        'ab_journal_editorial' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Journal (article) or editorial (book)',
+        ),
+        'ab_language' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'ab_publisher' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Publisher name (book)',
+        ),
+        'ab_place' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Place of publication',
+        ),
+      ),
+    'primary key' => array('abid'),);
+
+    $schema['reposi_article_book_detail'] = array(
+      'fields' => array(
+        'abdid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'Publication ID',
+        ),
+        'abd_volume' => array(
+          'type' => 'varchar',
+          'length' => '20',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_issue' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_start_page' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_final_page' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_issn' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_isbn' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_url' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_doi' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'abd_abid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+      ),
+    'primary key' => array('abdid'),);
+
+    $schema['reposi_thesis_sw'] = array(
+      'fields' => array(
+        'tsid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'ts_type' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Thesis or SW',
+        ),
+        'ts_title' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+          'description' => 'Title (thesis) or name (sw)',
+        ),
+        'ts_institu_ver' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Institution (thesis) or version (sw)',
+        ),
+        'ts_degree' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Type of degree (thesis)',
+        ),
+        'ts_discip_place' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Discipline (thesis) or place of production (sw)',
+        ),
+        'ts_url' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+        ),
+      ),
+    'primary key' => array('tsid'),);
+
+    $schema['reposi_confer_patent'] = array(
+      'fields' => array(
+        'cpid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'cp_type' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Conference or Patent',
+        ),
+        'cp_title' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+          'description' => 'Title (conference) or invention (patent)',
+        ),
+        'cp_abstract' => array(
+          'type' => 'text',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'cp_number' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'cp_spon_owner' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+          'description' => 'Sponsor (conference) or Owner (patent)',
+        ),
+        'cp_place_type' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Place (conference) or Type (patent)',
+        ),
+        'cp_publication' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Publication’s title',
+        ),
+        'cp_start_page' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'cp_final_page' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'cp_url' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+        ),
+        'cp_doi' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+        ),
+      ),
+    'primary key' => array('cpid'),);
+
+    $schema['reposi_author'] = array(
+      'description' => 'Repository author data',
+      'fields' => array(
+        'aid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'Author ID',
+        ),
+        'a_id_scopus' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'a_first_name' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Author first name',
+        ),
+        'a_second_name' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Author second name',
+        ),
+        'a_first_lastname' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => 'Author first last name',
+        ),
+        'a_second_lastname' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Author second last name',
+        ),
+      ),
+    'primary key' => array('aid'),);
+
+
+    //OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    //________________________________REPOSI ACADEMIC_ROL______________________________________
+    //00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+    $schema['reposi_academic'] = array(
+      'description' => 'Academic rol list',
+      'fields' => array(
+        'academic_id' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'academic_type' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'academic_uid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+      ),
+      //______________________________insert values_______________________________________
+      'values' => array(
+        'academic_id' => '100',
+        'academic_type' => 'Teacher',
+        'academic_uid' => '',
+      ),
+
+    'primary key' => array('academic_id'),);
+
+    $schema['reposi_state'] = array(
+      'description' => '',
+      'fields' => array(
+        'state_id' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        's_type' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        's_uid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+      ),
+    'primary key' => array('state_id'),);
+
+    $schema['reposi_publication_author'] = array(
+      'description' => 'Relationship much to much',
+      'fields' => array(
+        'apid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'ap_author_id' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'ap_abid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Article or Book ID',
+        ),
+        'ap_tsid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Thesis or SW ID',
+        ),
+        'ap_cpid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Conference or Patent ID',
+        ),
+      ),
+    'primary key' => array('apid'),);
+
+    $schema['reposi_keyword'] = array(
+      'description' => '',
+      'fields' => array(
+        'kid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'k_word' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+      ),
+    'primary key' => array('kid'),);
+
+    $schema['reposi_date'] = array(
+      'description' => '',
+      'fields' => array(
+        'did' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'd_day' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'd_month' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'd_year' => array(
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'd_abid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Article or Book ID',
+        ),
+        'd_tsid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Thesis or SW ID',
+        ),
+        'd_cpid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Conference or Patent ID',
+        ),
+      ),
+    'primary key' => array('did'),);
+
+    $schema['reposi_publication_keyword'] = array(
+      'description' => 'Relationship much to much',
+      'fields' => array(
+        'pkid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'pk_keyword_id' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'pk_abid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Article or Book ID',
+        ),
+        'pk_tsid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Thesis or SW ID',
+        ),
+        'pk_cpid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Conference or Patent ID',
+        ),
+      ),
+    'primary key' => array('pkid'),);
+
+    $schema['reposi_publication'] = array(
+      'fields' => array(
+        'pid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'p_type' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'p_title' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'p_year' => array(
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+        'p_check' => array(
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'description' => '1 validate, 0 unvalidated',
+        ),
+        'p_eid_scopus' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'p_abid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'p_tsid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'p_cpid' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+      ),
+    'primary key' => array('pid'),);
+
+    return ($schema);
+}
+
+/**
+ * It store the possible academic rols for a user.
+ */
+function reposi_academic_rol() {
+
+
+  $arol[] = array(100, t('Teacher'), NULL);
+  $arol[] = array(101, t('Student'), NULL);
+  $arol[] = array(102, t('Student and Teacher'), NULL);
+  $db = \Drupal::database(); 
+  foreach ($arol as $record) {
+    $db->insert('reposi_academic')
+       ->fields(array(
+      'academic_id'   => $record[0],
+      'academic_type' => $record[1],
+      'academic_uid'  => $record[2],
+    ))
+       ->execute();
+  }
+ return;
+}
+
+/**
+ * It store the possible states for a user.
+ */
+function _reposi_state() {
+  $stat[] = array(1, 'Active', NULL);
+  $stat[] = array(2, 'Inactive', NULL);
+
+  foreach ($stat as $record) {
+    db_insert('reposi_state')->fields(array(
+      'state_id'  => $record[0],
+      's_type'    => $record[1],
+      's_uid'     => $record[2],
+    ))->execute();
+  }
+ return;
+}

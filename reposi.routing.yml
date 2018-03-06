@@ -1,0 +1,183 @@
+reposi:
+  path: /reposi
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposi_list_publication_free'
+    _title: 'Repository'
+  requirements:
+    _permission: 'administer content'
+
+reposi.PubliListReposiSearch:
+  path: '/reposi/results/{node}'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::PubliListReposiSearch'
+    _title: 'Search results'
+  requirements:
+    _permission: 'administer content'
+
+reposi.author:
+  path: '/reposi/author'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::ListAuthor'
+    _title: 'Authors list'
+  requirements:
+    _permission: 'access content'
+
+
+##################3andrea##########################################
+
+reposi.formexample:
+  path: 'reposi/formexample'
+  defaults:
+    _form: '\Drupal\reposi\Form\formexample'
+    _title: 'FORM EXAMPLE'
+  requirements:
+    _permission: 'access content'
+
+
+reposi.add_article:
+  path: 'reposi/article'
+  defaults:
+    _form: '\Drupal\reposi\Form\Reposi_article_form'
+    _title: 'Authors list'
+  requirements:
+    _permission: 'access content'
+
+reposi.admuser:
+  path: /reposi/admuser
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposi_user_admin_form'
+    _title: 'Repository'
+  requirements:
+    _permission: 'administer content'
+
+
+reposi.author_aid:
+  path: 'reposi/author/{node}'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::reposi_info_author'
+    _title: 'Authors list'
+  requirements:
+    _permission: 'access content'
+
+reposi.listus:
+  path: 'reposi/listus'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::reposi_user_list'
+    _title: 'User list'
+  requirements:
+    _permission: 'administer content'
+
+reposi.listusactive:
+  path: 'reposi/listus/active'
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposi_user_act_list_form'
+    _title: 'User active list'
+  requirements:
+    _permission: 'administer content'
+
+reposi.listusinactive:
+  path: 'reposi/listus/inactive'
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposi_user_inact_list_form'
+    _title: 'User Inactive list'
+  requirements:
+    _permission: 'administer content'
+
+reposi.admuser_info:
+  path: 'reposi/adm_user/{node}'
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposi_info_user'
+    _title: 'User information'
+  requirements:
+    _permission: 'administer content'
+
+reposi.userdelete:
+  path: 'reposi/adm_user/userdelete/{node}'
+  defaults:
+    _form: 'Drupal\reposi\Form\User_delete_form'
+    _title: 'User Delete'
+  requirements:
+    _permission: 'administer content'
+
+reposi.useredit:
+  path: 'reposi/adm_user/edit'
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposi_useredit_form'
+    _title: 'User Edit'
+  requirements:
+    _permission: 'administer content'
+
+reposi.useredit_admin:
+  path: 'reposi/adm_edituser/{node}'
+  defaults:
+    _form: 'Drupal\reposi\Form\Reposiuser_edit_admin'
+    _title: 'Edit user'
+  requirements:
+    _permission: 'administer content'
+
+
+####################Juan###########################################
+
+reposi.reposi_format_ris:
+  path: '/reposi/ris/{node}'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_export::reposi_format_ris'
+    _title: 'RIS'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationAF:
+  path: '/reposi/article/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_article_free'
+    _title: 'Article information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationBF:
+  path: '/reposi/book/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_book_free'
+    _title: 'Book information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationCBF:
+  path: '/reposi/chap_book/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_chap_book_free'
+    _title: 'Book Chapter information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationCF:
+  path: '/reposi/conference/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_conference_free'
+    _title: 'Conference Paper information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationTF:
+  path: '/reposi/thesis/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_conference_free'
+    _title: 'Thesis information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationPF:
+  path: '/reposi/patent/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_patent_free'
+    _title: 'Patent information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_publicationSF:
+  path: '/reposi/software/{node}/free'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_sw_free'
+    _title: 'Software information'
+  requirements:
+    _permission: 'access content'
