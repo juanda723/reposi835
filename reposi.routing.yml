@@ -109,6 +109,14 @@ reposi.useredit_admin:
 
 ####################Juan###########################################
 
+reposi.add_book:
+  path: 'reposi/book'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_book_form'
+    _title: 'add book'
+  requirements:
+    _permission: 'access content'
+
 reposi.reposi_format_ris:
   path: '/reposi/ris/{node}'
   defaults:
