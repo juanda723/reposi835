@@ -25,15 +25,6 @@ reposi.author:
 
 ##################3andrea##########################################
 
-reposi.formexample:
-  path: 'reposi/formulario'
-  defaults:
-    _form: '\Drupal\reposi\Form\ReposiForm'
-    _title: 'FORM EXAMPLE'
-  requirements:
-    _permission: 'access content'
-
-
 reposi.add_article:
   path: 'reposi/article'
   defaults:
