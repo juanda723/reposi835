@@ -1,0 +1,29 @@
+<?php
+
+function reposi_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+}
+
+
+function reposi_has_role() {
+  global $user;
+  $roles = array('authenticated user','administrator','anonymous user');
+  foreach ($roles as $role) {
+    if (in_array($role, $user->roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+function _reposi_user_role_administrator() { 
+  global $user;
+  $roles = array('administrator');
+  foreach ($roles as $role) {
+    if (in_array($role, $user->roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+?>
