@@ -117,6 +117,31 @@ reposi.add_book:
   requirements:
     _permission: 'access content'
 
+reposi.chap_book:
+  path: 'reposi/chap_book'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_chap_book_form'
+    _title: 'Add book chapter'
+  requirements:
+    _permission: 'access content'
+
+reposi.software:
+  path: 'reposi/software'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_software_form'
+    _title: 'Add software'
+  requirements:
+    _permission: 'access content'
+
+reposi.patent:
+  path: 'reposi/patent'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_patent_form'
+    _title: 'Add patent'
+  requirements:
+    _permission: 'access content'
+
+
 reposi.reposi_format_ris:
   path: '/reposi/ris/{node}'
   defaults:

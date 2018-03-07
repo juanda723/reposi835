@@ -22,13 +22,13 @@ class Reposi_article_form extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
 /*ISSET: Determina si una variable está definida y no es NULL.
-$form_state['storage']: Los datos colocados en el contenedor de almacenamiento de la colección $ form_state se almacenarán automáticamente en caché y se volverán a cargar cuando se envíe el formulario, permitiendo que su código acumule datos de paso a paso y lo procese en la etapa final sin ningún código adicional 
-ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABLE ESTÁ DEBIDAMENTE DECLARADA CON ANTERIORIDAD 
+$form_state['storage']: Los datos colocados en el contenedor de almacenamiento de la colección $ form_state se almacenarán automáticamente en caché y se volverán a cargar cuando se envíe el formulario, permitiendo que su código acumule datos de paso a paso y lo procese en la etapa final sin ningún código adicional
+ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABLE ESTÁ DEBIDAMENTE DECLARADA CON ANTERIORIDAD
       $form_state['storage']['author'] = isset($form_state['storage']['author'])?
                                          $form_state['storage']['author']:1;*/
 
   $_reposi_start_form=TRUE;
-  $markup = '<p>' . '<i>' . t('You must complete the required fields before the 
+  $markup = '<p>' . '<i>' . t('You must complete the required fields before the
             add authors or keywords.') . '</i>' . '</p>';
   $form['body'] = array('#markup' => $markup);
   $form['title'] = array(
@@ -255,12 +255,12 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   /******************************************************************/
 
 //--------------------------------------------------------------------------------------------------------
-   
+
 //--------------------------------------------------------------------------------------------------------
    return $form;
 
   }
- 
+
   public function addfieldsubmit(array &$form, FormStateInterface &$form_state) {
     $max = $form_state->get('fields_count') + 1;
     $form_state->set('fields_count',$max);
@@ -304,31 +304,31 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   // DAY, month year ARTICLE VALIDATION
 
   $day_validate = $form_state->getValue('day');
-  if(!empty($day_validate) && (!is_numeric($day_validate) || 
+  if(!empty($day_validate) && (!is_numeric($day_validate) ||
       $day_validate > '31' || $day_validate < '1')) {
     $form_state->setErrorByName('day', t('It is not an allowable value for day.'));
-  } 
-  
+  }
+
   $month_validate =  $form_state->getValue('month');
-  if(!empty($month_validate) && (!is_numeric($month_validate) || 
+  if(!empty($month_validate) && (!is_numeric($month_validate) ||
       $month_validate > '12' || $month_validate < '1')) {
     $form_state->setErrorByName('month', t('It is not an allowable value for month.'));
-  } 
+  }
 
   $year_validate = $form_state->getValue('year');
-  if(!is_numeric($year_validate) || $year_validate > '9999' || 
+  if(!is_numeric($year_validate) || $year_validate > '9999' ||
       $year_validate < '1000') {
     $form_state->setErrorByName('year', t('It is not an allowable value for year.'));
   }
 
   $startp_validate = $form_state->getValue('jou_start_page');
-  if(!empty($startp_validate) && (!is_numeric($startp_validate) || 
+  if(!empty($startp_validate) && (!is_numeric($startp_validate) ||
       $startp_validate < '0')){
     $form_state->setErrorByName('jou_start_page', t('Start page is a numerical field.'));
   }
 
   $finalp_validate = $form_state->getValue('jou_final_page');
-  if(!empty($finalp_validate) && (!is_numeric($finalp_validate) || 
+  if(!empty($finalp_validate) && (!is_numeric($finalp_validate) ||
       $finalp_validate < '0')){
     $form_state->setErrorByName('jou_final_page', t('Final page is a numerical field.'));
   }
@@ -340,7 +340,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   $key = $form_state->getValue('keywordtable');
   $keyword=$key[0]['key'];
   if (empty($first_name_validate) || empty($first_lastname_validate)){
-    $form_state->setErrorByName('first_name', t('One author is required as minimum 
+    $form_state->setErrorByName('first_name', t('One author is required as minimum
     (first name and last name).'));
   }
 
@@ -353,7 +353,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-  
+
   $adm_aca_type = $form_state->getValue('name');
   $author1_validate = $form_state->getValue('table');
   $art_title = $form_state->getValue('title');
@@ -414,7 +414,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   } else {
     $art_final_page = NULL;
   }
-  if (!empty($art_vol) || !empty($art_issue) || !empty($art_spage) || 
+  if (!empty($art_vol) || !empty($art_issue) || !empty($art_spage) ||
       !empty($art_fpage) || !empty($art_issn) || !empty($art_url) || !empty($art_doi)) {
     db_insert('reposi_article_book_detail')->fields(array(
       'abd_volume'     => $art_vol,
@@ -439,9 +439,9 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   $first_lastname_validate=$table[$a]['f_lastname'];
   $aut_fn=$table[$a]['first_name'];
   $aut_sn=$table[$a]['second_name'];
-  $aut_fl=$table[$a]['f_lastname']; 
+  $aut_fl=$table[$a]['f_lastname'];
   $aut_sl=$table[$a]['s_lastname'];
- 
+
    !empty($aut_fn)?$aut_fn:'';
    !empty($aut_sn)?$aut_sn:'';
    !empty($aut_fl)?$aut_fl:'';
@@ -484,7 +484,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
       }
     } else {
       if(isset($table[$a]['first_name']) || isset($table[$a]['f_lastname'])){
-        drupal_set_message(t('The authors without first name or first 
+        drupal_set_message(t('The authors without first name or first
         last name will not be save.'), 'warning');
       }
     }
@@ -495,8 +495,8 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
       $form_state->set('fields_keyword_count', $max);
     }
 
- 
-  for ($q = 0; $q <= $maxkeyword ; $q++) { 
+
+  for ($q = 0; $q <= $maxkeyword ; $q++) {
   $keyword = $form_state->getValue('keywordtable');
     if (!empty($keyword[$q]['key'])) {
       $keywords[] = $keyword[$q]['key'];
@@ -532,12 +532,12 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
         ))->execute();
       }
       $cont_keywords++;
-    } 
-  }   
+    }
+  }
 
   drupal_set_message(t('Article: ') . $art_title . t(' was save.'));
 
-  
+
 
 //-------------------------------------------------------------------------------------------------------------------------
   }
