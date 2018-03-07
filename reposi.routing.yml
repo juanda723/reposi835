@@ -29,7 +29,23 @@ reposi.add_article:
   path: 'reposi/article'
   defaults:
     _form: '\Drupal\reposi\Form\Reposi_article_form'
-    _title: 'Authors list'
+    _title: 'Add article'
+  requirements:
+    _permission: 'access content'
+
+reposi.add_conference:
+  path: 'reposi/conference'
+  defaults:
+    _form: '\Drupal\reposi\Form\Reposi_conference_form'
+    _title: 'Add conference'
+  requirements:
+    _permission: 'access content'
+
+reposi.add_una_thesis:
+  path: 'reposi/thesis'
+  defaults:
+    _form: '\Drupal\reposi\Form\Reposi_thesis'
+    _title: 'Add thesis'
   requirements:
     _permission: 'access content'
 
@@ -108,6 +124,14 @@ reposi.useredit_admin:
 
 
 ####################Juan###########################################
+
+reposi.add_book:
+  path: 'reposi/book'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_book_form'
+    _title: 'Add book'
+  requirements:
+    _permission: 'access content'
 
 reposi.reposi_format_ris:
   path: '/reposi/ris/{node}'
