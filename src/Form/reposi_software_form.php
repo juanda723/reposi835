@@ -5,7 +5,11 @@ namespace Drupal\reposi\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Database\Query;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\reposi\Controller\Reposi_info_publication;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Implements an example form.
@@ -122,6 +126,7 @@ $form['version'] = array(
   );
   $form['url'] = array(
     '#title' => t('URL'),
+    '#description' => t('Example: https://www.example.com'),
     '#type' => 'textfield',
     '#maxlength' => 511,
   );
@@ -176,6 +181,12 @@ if (empty($first_name_validate) || empty($first_lastname_validate)){
   $form_state->setErrorByName('first_name', t('One author is required as minimum
   (first name and last name).'));
 }
+///validate Url
+  $url=$form_state->getValue('url');
+  if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+  {
+   $form_state->setErrorByName('uri', t('The URL is not valid.'));
+  }
 ///end function
 }
 public function submitForm(array &$form, FormStateInterface $form_state) {

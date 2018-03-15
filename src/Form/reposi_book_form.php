@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\reposi\Controller\Reposi_info_publication;
-
+use Drupal\Component\Utility\UrlHelper;
 /**
  * Implements an example form.
  */
@@ -184,6 +184,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
     );
     $form['url'] = array(
       '#title' => t('URL'),
+      '#description' => t('Example: https://www.example.com'),
       '#type' => 'textfield',
       '#maxlength' => 511,
     );
@@ -263,7 +264,12 @@ if (empty($first_name_validate) || empty($first_lastname_validate)){
         $year_validate < '1000') {
       $form_state->setErrorByName('year', t('It is not an allowable value for year.'));
     }
-
+    ///validate Url
+      $url=$form_state->getValue('url');
+      if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+      {
+       $form_state->setErrorByName('uri', t('The URL is not valid.'));
+      }
 
     }
     /**

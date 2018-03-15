@@ -9,6 +9,7 @@ use Drupal\Core\Database\Query;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\reposi\Controller\Reposi_info_publication;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Implements an example form.
@@ -21,7 +22,7 @@ class Reposi_thesis extends FormBase {
 
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-  $markup = '<p>' . '<i>' . t('You must complete the required fields before the 
+  $markup = '<p>' . '<i>' . t('You must complete the required fields before the
             add authors or keywords.') . '</i>' . '</p>';
   $form['body'] = array('#markup' => $markup);
   $form['title'] = array(
@@ -33,9 +34,9 @@ class Reposi_thesis extends FormBase {
   $form['degree'] = array(
     '#title' => t('Type degree'),
     '#type' => 'select',
-    '#options' => array(t('University Degree'), 
-                        t('Specialization’s Degree'), 
-                        t('Master’s Degree'), 
+    '#options' => array(t('University Degree'),
+                        t('Specialization’s Degree'),
+                        t('Master’s Degree'),
                         t('PhD thesis')),
     '#required' => TRUE,
   );
@@ -214,6 +215,7 @@ class Reposi_thesis extends FormBase {
   );
   $form['url'] = array(
     '#title' => t('URL'),
+    '#description' => t('Example: https://www.example.com'),
     '#type' => 'textfield',
     '#maxlength' => 511,
   );
@@ -226,12 +228,12 @@ class Reposi_thesis extends FormBase {
   /******************************************************************/
 
 //--------------------------------------------------------------------------------------------------------
-   
+
 //--------------------------------------------------------------------------------------------------------
    return $form;
 
   }
- 
+
   public function addfieldsubmit(array &$form, FormStateInterface &$form_state) {
     $max = $form_state->get('fields_count') + 1;
     $form_state->set('fields_count',$max);
@@ -275,19 +277,19 @@ class Reposi_thesis extends FormBase {
   // DAY, month year ARTICLE VALIDATION
 
   $day_validate = $form_state->getValue('day');
-  if(!empty($day_validate) && (!is_numeric($day_validate) || 
+  if(!empty($day_validate) && (!is_numeric($day_validate) ||
       $day_validate > '31' || $day_validate < '1')) {
     $form_state->setErrorByName('day', t('It is not an allowable value for day.'));
-  } 
-  
+  }
+
   $month_validate =  $form_state->getValue('month');
-  if(!empty($month_validate) && (!is_numeric($month_validate) || 
+  if(!empty($month_validate) && (!is_numeric($month_validate) ||
       $month_validate > '12' || $month_validate < '1')) {
     $form_state->setErrorByName('month', t('It is not an allowable value for month.'));
-  } 
+  }
 
   $year_validate = $form_state->getValue('year');
-  if(!is_numeric($year_validate) || $year_validate > '9999' || 
+  if(!is_numeric($year_validate) || $year_validate > '9999' ||
       $year_validate < '1000') {
     $form_state->setErrorByName('year', t('It is not an allowable value for year.'));
   }
@@ -299,13 +301,19 @@ class Reposi_thesis extends FormBase {
   $key = $form_state->getValue('keywordtable');
   $keyword=$key[0]['key'];
   if (empty($first_name_validate) || empty($first_lastname_validate)){
-    $form_state->setErrorByName('first_name', t('One author is required as minimum 
+    $form_state->setErrorByName('first_name', t('One author is required as minimum
     (first name and last name).'));
   }
-
   if (empty($keyword)){
         drupal_set_message(t('One keyword is required as minimum.'), 'warning');
   }
+  ///validate Url
+    $url=$form_state->getValue('url');
+    if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+    {
+     $form_state->setErrorByName('uri', t('The URL is not valid.'));
+    }
+
   }
   /**
    * {@inheritdoc}
@@ -381,9 +389,9 @@ class Reposi_thesis extends FormBase {
   $first_lastname_validate=$table[$a]['f_lastname'];
   $aut_fn=$table[$a]['first_name'];
   $aut_sn=$table[$a]['second_name'];
-  $aut_fl=$table[$a]['f_lastname']; 
+  $aut_fl=$table[$a]['f_lastname'];
   $aut_sl=$table[$a]['s_lastname'];
- 
+
    !empty($aut_fn)?strtolower($aut_fn):'';
    !empty($aut_sn)?strtolower($aut_sn):'';
    !empty($aut_fl)?strtolower($aut_fl):'';
@@ -426,7 +434,7 @@ class Reposi_thesis extends FormBase {
       }
     } else {
       if(isset($table[$a]['first_name']) || isset($table[$a]['f_lastname'])){
-        drupal_set_message(t('The authors without first name or first 
+        drupal_set_message(t('The authors without first name or first
         last name will not be save.'), 'warning');
       }
     }
@@ -437,8 +445,8 @@ class Reposi_thesis extends FormBase {
       $form_state->set('fields_keyword_count', $max);
     }
 
- 
-  for ($q = 0; $q <= $maxkeyword ; $q++) { 
+
+  for ($q = 0; $q <= $maxkeyword ; $q++) {
   $keyword = $form_state->getValue('keywordtable');
     if (!empty($keyword[$q]['key'])) {
       $keywords[] = $keyword[$q]['key'];
@@ -474,10 +482,10 @@ class Reposi_thesis extends FormBase {
         ))->execute();
       }
       $cont_keywords++;
-    } 
-  }   
+    }
+  }
 
-  drupal_set_message(t('Thesis: ') . $the_title . t(' was update.')); 
+  drupal_set_message(t('Thesis: ') . $the_title . t(' was update.'));
 
 //-------------------------------------------------------------------------------------------------------------------------
   }

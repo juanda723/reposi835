@@ -7,9 +7,10 @@
 namespace Drupal\reposi\Controller;
 use Drupal\Core\Database;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 class Reposi_info_publication {
-
+/////////////////////////////Start FUNTIONS RAMDON//////////////////////////////////////////////////////
 
 public static function reposi_string($string) {
     $string = trim($string);
@@ -87,8 +88,9 @@ public static function reposi_formt_date($day, $month, $year){
   }
   return $format_dates;
 }
-
-public function reposi_info_article_free(){
+/////////////////////////////END fUNTIONS RAMDON//////////////////////////////////////////////////////
+/////////////////////////////START PUBLICATION free//////////////////////////////////////////////////////
+public static function reposi_info_article_free(){
 
   $art_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
@@ -100,8 +102,6 @@ public function reposi_info_article_free(){
   $search_art->fields('ab')
           ->condition('ab.abid', $art_id, '=');
   $info_publi = $search_art->execute()->fetchAssoc();
-  $ejemplovar = print_r($info_publi['ab_title']);
-
   $search_art_detail = db_select('reposi_article_book_detail', 'abd');
   $search_art_detail->fields('abd')
           ->condition('abd.abd_abid', $art_id, '=');
@@ -109,6 +109,7 @@ public function reposi_info_article_free(){
   $search_date = db_select('reposi_date', 'd');
   $search_date->fields('d')
               ->condition('d.d_abid', $art_id, '=');
+
   $art_date = $search_date->execute()->fetchAssoc();
 
   $format_date = Reposi_info_publication::reposi_formt_date($art_date['d_day'],$art_date['d_month'],$art_date['d_year']);
@@ -147,7 +148,7 @@ public function reposi_info_article_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_art = $authors_art . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
-/////////////////////////Duireccion CAmbiar Falta /reposi/author/{node}
+/////////////////////////Direccion CAmbiar Falta /reposi/author/{node}
       } else {
         $authors_art = $authors_art . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ',Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
@@ -189,7 +190,8 @@ public function reposi_info_article_free(){
   $markup .= '<li>'. '<i>'. t('Date: ') . '</i>' . $format_date . '</li>';
   if (!empty($info_publi_2['abd_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi_2['abd_url'], $info_publi_2['abd_url']) . '</li>';
+              //Link::fromTextAndUrl(t($info_publi_2['abd_url']), $info_publi_2['abd_url']);
+               \Drupal::l($info_publi_2['abd_url'], Url::fromUri($info_publi_2['abd_url'])) . '</li>';
   }
   if (!empty($info_publi_2['abd_doi'])) {
     $markup .= '<li>'. '<i>'. t('DOI: ') . '</i>' . $info_publi_2['abd_doi'] . '</li>';
@@ -232,7 +234,7 @@ $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
 $risSend=\Drupal::l(t('RIS'),$url);
   $form['export'] = array(
     '#type' => 'item',
-    '#title' => t('Export formats: '.$ejemplovar),
+    '#title' => t('Export formats: '),
     '#markup' => $risSend,
   );
   return $form;
@@ -240,7 +242,7 @@ $risSend=\Drupal::l(t('RIS'),$url);
 
 ////////////////////////////////////////////////
 
-function reposi_info_book_free(){
+public static function reposi_info_book_free(){
   $book_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
   $form['pid'] = array(
@@ -279,25 +281,24 @@ function reposi_info_book_free(){
       if (!empty($each_aut['a_second_name'])) {
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_book = $authors_book . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '. ' . $s_name[0] . '.',Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      ' ' . $f_name[0] . '. ' . $s_name[0] . '.',Url::fromRoute('reposi.author_aid',['node'=>$aut_book->ap_author_id])) . ', ';
       } else {
         $authors_book = $authors_book . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id] )) . ', ';
+                      ' ' . $f_name[0] . '. ', Url::fromRoute('reposi.author_aid',['node'=>$aut_book->ap_author_id] )) . ', ';
       }
     } else {
       $search_aut = db_select('reposi_author', 'a');
       $search_aut->fields('a')
                  ->condition('a.aid', $aut_book->ap_author_id, '=');
       $each_aut = $search_aut->execute()->fetchAssoc();
-      $f_name = reposi_string($each_aut['a_first_name']);
+      $f_name = Reposi_info_publication::reposi_string($each_aut['a_first_name']);
       if (!empty($each_aut['a_second_name'])) {
-        $s_name = reposi_string($each_aut['a_second_name']);
+        $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_book = $authors_book . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.reposi_format_ris',['node'=>$aut_art->ap_author_id])) . '.';
+                      ' ' . $f_name[0] . '. ' . $s_name[0] . '.',Url::fromRoute('reposi.author_aid',['node'=>$aut_book->ap_author_id]))  . '.';
       } else {
         $authors_book = $authors_book . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.reposi_format_ris',['node'=>$aut_art->ap_author_id])) . '.';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_book->ap_author_id])) . '.';
       }
     }
   }
@@ -339,7 +340,7 @@ function reposi_info_book_free(){
   }
   if (!empty($info_publi_2['abd_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi_2['abd_url'], $info_publi_2['abd_url']) . '</li>';
+               \Drupal::l($info_publi_2['abd_url'], Url::fromUri($info_publi_2['abd_url'])) . '</li>';
   }
   if (!empty($info_publi_2['abd_doi'])) {
     $markup .= '<li>'. '<i>'. t('DOI: ') . '</i>' . $info_publi_2['abd_doi'] . '</li>';
@@ -365,7 +366,7 @@ function reposi_info_book_free(){
   return $form;
 }
 
-function reposi_info_chap_book_free(){
+public static function reposi_info_chap_book_free(){
 $chap_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
   $form['pid'] = array(
@@ -404,10 +405,10 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_chap = $authors_chap . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_chap->ap_author_id])) . ', ';
       } else {
         $authors_chap = $authors_chap . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_chap->ap_author_id])) . ', ';
       }
     } else {
       $search_aut = db_select('reposi_author', 'a');
@@ -419,10 +420,10 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_chap = $authors_chap . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_chap->ap_author_id])) . '.';
       } else {
         $authors_chap = $authors_chap . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_chap->ap_author_id])) . '.';
       }
     }
   }
@@ -465,7 +466,7 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
   }
   if (!empty($info_publi_2['abd_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi_2['abd_url'], $info_publi_2['abd_url']) . '</li>';
+    \Drupal::l($info_publi_2['abd_url'], Url::fromUri($info_publi_2['abd_url'])) . '</li>';
   }
   if (!empty($info_publi_2['abd_doi'])) {
     $markup .= '<li>'. '<i>'. t('DOI: ') . '</i>' . $info_publi_2['abd_doi'] . '</li>';
@@ -486,7 +487,7 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
   $risSend=\Drupal::l(t('RIS'),$url);
     $form['export'] = array(
       '#type' => 'item',
-      '#title' => t('Export formats: '.$ejemplovar),
+      '#title' => t('Export formats: '),
       '#markup' => $risSend,
     );
 
@@ -494,7 +495,7 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
 }
 //////////reposi_info_conference_free
 
-function reposi_info_conference_free(){
+public static function reposi_info_conference_free(){
 
   $con_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
@@ -534,10 +535,10 @@ function reposi_info_conference_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_con = $authors_con . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_con->ap_author_id])) . ', ';
       } else {
         $authors_con = $authors_con . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_con->ap_author_id])) . ', ';
       }
     } else {
       $search_aut = db_select('reposi_author', 'a');
@@ -549,10 +550,10 @@ function reposi_info_conference_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_con = $authors_con . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_con->ap_author_id])) . '.';
       } else {
         $authors_con = $authors_con . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.',Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id]) ) . '.';
+                      ' ' . $f_name[0] . '.',Url::fromRoute('reposi.author_aid',['node'=>$aut_con->ap_author_id]) ) . '.';
       }
     }
   }
@@ -609,7 +610,7 @@ function reposi_info_conference_free(){
              '<li>'. '<i>'. t('Ending date: ') . '</i>' . $format_dates[2] . '</li>' . '</ul>';
   if (!empty($info_publi['cp_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi['cp_url'], $info_publi['cp_url']) . '</li>';
+      \Drupal::l($info_publi['cp_url'], Url::fromUri($info_publi['cp_url'])) . '</li>';
   }
   if (!empty($info_publi['cp_doi'])) {
     $markup .= '<li>'. '<i>'. t('DOI: ') . '</i>' . $info_publi['cp_doi'] . '</li>';
@@ -638,7 +639,7 @@ function reposi_info_conference_free(){
 }
 
 ///////////reposi_info_thesis_free
-function reposi_info_thesis_free(){
+public static function reposi_info_thesis_free(){
   $the_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
   $form['pid'] = array(
@@ -674,10 +675,10 @@ function reposi_info_thesis_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_the = $authors_the . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.reposi_format_ris',['node'=>$aut_art->ap_author_id])) . ', ';
+                      Url::fromRoute('reposi.reposi_format_ris',['node'=>$aut_the->ap_author_id])) . ', ';
       } else {
         $authors_the = $authors_the . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.reposi_format_ris',['node'=>$aut_art->ap_author_id]) ) . ', ';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.reposi_format_ris',['node'=>$aut_the->ap_author_id]) ) . ', ';
       }
     } else {
       $search_aut = db_select('reposi_author', 'a');
@@ -689,10 +690,10 @@ function reposi_info_thesis_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_the = $authors_the . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_the->ap_author_id])) . '.';
       } else {
         $authors_the = $authors_the . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_the->ap_author_id])) . '.';
       }
     }
   }
@@ -734,7 +735,7 @@ function reposi_info_thesis_free(){
   }
   if (!empty($info_publi['ts_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi['ts_url'], $info_publi['ts_url']) . '</li>';
+    \Drupal::l($info_publi['ts_url'], Url::fromUri($info_publi['ts_url'])) . '</li>';
   }
   $markup .= '</ul>';
   $form['body'] = array('#markup' => $markup);
@@ -758,7 +759,7 @@ function reposi_info_thesis_free(){
 }
 
 /////////////////////////////////
-function reposi_info_patent_free(){
+public static function reposi_info_patent_free(){
   $pat_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
   $form['pid'] = array(
@@ -793,10 +794,10 @@ function reposi_info_patent_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_pat = $authors_pat . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_pat->ap_author_id])) . ', ';
       } else {
         $authors_pat = $authors_pat . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_pat->ap_author_id])) . ', ';
       }
     } else {
       $search_aut = db_select('reposi_author', 'a');
@@ -808,10 +809,10 @@ function reposi_info_patent_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_pat = $authors_pat . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_pat->ap_author_id])) . '.';
       } else {
         $authors_pat = $authors_pat . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_pat->ap_author_id])) . '.';
       }
     }
   }
@@ -836,7 +837,7 @@ function reposi_info_patent_free(){
   }
   if (!empty($info_publi['cp_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-                l($info_publi['cp_url'], $info_publi['cp_url']) .'</li>';
+    \Drupal::l($info_publi['cp_url'], Url::fromUri($info_publi['cp_url'])) . '</li>';
   }
   $markup .= '</ul>';
   $form['body'] = array('#markup' => $markup);
@@ -862,7 +863,7 @@ function reposi_info_patent_free(){
 
 /////////////////////////////
 
-function reposi_info_sw_free(){
+public static function reposi_info_sw_free(){
 
   $sw_id = \Drupal::routeMatch()->getParameter('node');
   global $base_url;
@@ -898,10 +899,10 @@ function reposi_info_sw_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_sw = $authors_sw . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_sw->ap_author_id])) . ', ';
       } else {
         $authors_sw = $authors_sw . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . ', ';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_sw->ap_author_id])) . ', ';
       }
     } else {
       $search_aut = db_select('reposi_author', 'a');
@@ -913,10 +914,10 @@ function reposi_info_sw_free(){
         $s_name = Reposi_info_publication::reposi_string($each_aut['a_second_name']);
         $authors_sw = $authors_sw . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
                       ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
-                      Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      Url::fromRoute('reposi.author_aid',['node'=>$aut_sw->ap_author_id])) . '.';
       } else {
         $authors_sw = $authors_sw . \Drupal::l($each_aut['a_first_lastname'] . ' ' . $each_aut['a_second_lastname'] .
-                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_art->ap_author_id])) . '.';
+                      ' ' . $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$aut_sw->ap_author_id])) . '.';
       }
     }
   }
@@ -933,7 +934,7 @@ function reposi_info_sw_free(){
   }
   if (!empty($info_publi['ts_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi['ts_url'], $info_publi['ts_url']) . '</li>';
+    \Drupal::l($info_publi['ts_url'], Url::fromUri($info_publi['ts_url'])) . '</li>';
   }
   $markup .= '</ul>';
   $form['body'] = array('#markup' => $markup);
@@ -957,7 +958,11 @@ function reposi_info_sw_free(){
   return $form;
 }
 
+/////////////////////////////END PUBLICATION free//////////////////////////////////////////////////////
+//////////////////////////////Star PUBLICATION/////////////////////////////////////////////////////////
 
-/////////////////////////////
+
+//////////////////////////////END PUBLICATION//////////////////////////////////////////////////////////
+/////////////////////////////ENd class/////////////////////////////////////////////////////////////////
 
 }

@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\reposi\Controller\Reposi_info_publication;
-
+use Drupal\Component\Utility\UrlHelper;
 /**
  * Implements an example form.
  */
@@ -166,6 +166,7 @@ $form['vol'] = array(
   );
   $form['url'] = array(
     '#title' => t('URL'),
+    '#description' => t('Example: https://www.example.com'),
     '#type' => 'textfield',
     '#maxlength' => 511,
   );
@@ -270,7 +271,12 @@ public function validateForm(array &$form, FormStateInterface $form_state) {
         }
 
 
-
+        ///validate Url
+          $url=$form_state->getValue('url');
+          if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+          {
+           $form_state->setErrorByName('uri', t('The URL is not valid.'));
+          }
 
 ///////////////////////////////
 

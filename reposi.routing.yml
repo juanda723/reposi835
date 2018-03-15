@@ -1,7 +1,7 @@
 reposi:
-  path: /reposi
+  path: '/reposi'
   defaults:
-    _form: 'Drupal\reposi\Form\Reposi_list_publication_free'
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publication_free'
     _title: 'Repository'
   requirements:
     _permission: 'administer content'
@@ -133,7 +133,7 @@ reposi.add_book:
   requirements:
     _permission: 'access content'
 
-reposi.chap_book:
+reposi.add_chap_book:
   path: 'reposi/chap_book'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_chap_book_form'
@@ -141,7 +141,7 @@ reposi.chap_book:
   requirements:
     _permission: 'access content'
 
-reposi.software:
+reposi.add_software:
   path: 'reposi/software'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_software_form'
@@ -149,7 +149,7 @@ reposi.software:
   requirements:
     _permission: 'access content'
 
-reposi.patent:
+reposi.add_patent:
   path: 'reposi/patent'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_patent_form'
@@ -200,7 +200,7 @@ reposi.Reposi_info_publicationCF:
 reposi.Reposi_info_publicationTF:
   path: '/reposi/thesis/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_conference_free'
+    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_thesis_free'
     _title: 'Thesis information'
   requirements:
     _permission: 'access content'
@@ -218,5 +218,85 @@ reposi.Reposi_info_publicationSF:
   defaults:
     _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_sw_free'
     _title: 'Software information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_public_list:
+  path: '/reposi/listpub'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publication'
+    _title: 'Publication list'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_PubListComp:
+  path: '/reposi/listpub/type'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_publi_list_complete'
+    _title: 'Publication list by publication type'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_articleinformation:
+  path: 'reposi/article/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_artboochap'
+    _title: 'Article information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_bookinformation:
+  path: 'reposi/book/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_artboochap'
+    _title: 'Book information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_chapinformation:
+  path: 'reposi/chap_book/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_artboochap'
+    _title: 'Chapter Book information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_coninformation:
+  path: 'reposi/conference/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_conpat'
+    _title: 'Conference information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_patinformation:
+  path: 'reposi/patent/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_conpat'
+    _title: 'Patent information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_thesinformation:
+  path: 'reposi/thesis/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_thessoft'
+    _title: 'Thesis information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_sofinformation:
+  path: 'reposi/software/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_info_thessoft'
+    _title: 'Software information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_del_publi:
+  path: 'reposi/delete/publication/{node}'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_delete_publi'
+    _title: 'User Delete'
   requirements:
     _permission: 'access content'
