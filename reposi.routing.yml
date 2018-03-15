@@ -1,7 +1,7 @@
 reposi:
   path: '/reposi'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publication_free'
+    _form: '\Drupal\reposi\Form\Reposi_public_listFree'
     _title: 'Repository'
   requirements:
     _permission: 'administer content'
@@ -9,7 +9,7 @@ reposi:
 reposi.PubliListReposiSearch:
   path: '/reposi/results/{node}'
   defaults:
-    _controller: '\Drupal\reposi\Controller\ReposiController::PubliListReposiSearch'
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_search'
     _title: 'Search results'
   requirements:
     _permission: 'administer content'
@@ -297,6 +297,22 @@ reposi.Reposi_del_publi:
   path: 'reposi/delete/publication/{node}'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_delete_publi'
-    _title: 'User Delete'
+    _title: 'Publication Delete'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_info_keyword:
+  path: '/reposi/keyword/{node}'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_info_keyword::reposi_info_key'
+    _title: 'Keyword information'
+  requirements:
+    _permission: 'access content'
+
+reposi.Reposi_list_keyword:
+  path: '/reposi/keyword'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\reposi_keyword_list::reposi_list_key'
+    _title: 'Keyword information'
   requirements:
     _permission: 'access content'

@@ -168,11 +168,11 @@ public static function reposi_info_article_free(){
                 ->condition('k.kid', $key_art->pk_keyword_id, '=');
     $keywords = $search_keyw->execute()->fetchAssoc();
     if ($flag_keyw == 1) {
-      $keyws_art = \Drupal::l($keywords['k_word'],Url::fromRoute('reposi.reposi_format_ris',['node'=>$keywords['kid']]));
+      $keyws_art = \Drupal::l($keywords['k_word'],Url::fromRoute('reposi.Reposi_info_keyword',['node'=>$keywords['kid']]));
       ///////////////////////Falta direccion a /reposi/keyword/{node} ESta en ris
 
     } else {
-      $keyws_art = $keyws_art . ', ' . $keyws_art = \Drupal::l($keywords['k_word'],Url::fromRoute('reposi.reposi_format_ris',['node'=>$keywords['kid']]));
+      $keyws_art = $keyws_art . ', ' . $keyws_art = \Drupal::l($keywords['k_word'],Url::fromRoute('reposi.Reposi_info_keyword',['node'=>$keywords['kid']]));
     }
   }
   //$info_publi['ab_title']='1';
@@ -571,10 +571,10 @@ public static function reposi_info_conference_free(){
     $keywords = $search_keyw->execute()->fetchAssoc();
     if ($flag_keyw == 1) {
       $keyws_con = \Drupal::l($keywords['k_word'],
-                Url::fromRoute('reposi.reposi_format_ris',['node'=>$keywords['kid']]));
+                Url::fromRoute('reposi.Reposi_info_keyword',['node'=>$keywords['kid']]));
     } else {
       $keyws_con = $keyws_con . ', ' . \Drupal::l($keywords['k_word'],
-                Url::fromRoute('reposi.reposi_format_ris',['node'=>$keywords['kid']]));
+                Url::fromRoute('reposi.Reposi_info_keyword',['node'=>$keywords['kid']]));
     }
   }
   $markup = '<p>' . '<b>' . '<big>' . t($info_publi['cp_publication']) . '</big>' .
@@ -711,10 +711,10 @@ public static function reposi_info_thesis_free(){
     $keywords = $search_keyw->execute()->fetchAssoc();
     if ($flag_keyw == 1) {
       $keyws_the = \Drupal::l($keywords['k_word'],
-                Url::fromRoute('reposi.reposi_format_ris',['node'=>$keywords['kid']]));
+                Url::fromRoute('reposi.Reposi_info_keyword',['node'=>$keywords['kid']]));
     } else {
       $keyws_the = $keyws_the . ', ' . \Drupal::l($keywords['k_word'],
-                Url::fromRoute('reposi.reposi_format_ris',['node'=>$keywords['kid']]));
+                Url::fromRoute('reposi.Reposi_info_keyword',['node'=>$keywords['kid']]));
     }
   }
   $markup = '<p>' . '<b>' . '<big>' . t($info_publi['ts_title']) . '</big>' .

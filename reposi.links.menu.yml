@@ -44,3 +44,9 @@ reposi.listpubtype:
   route_name: reposi.Reposi_PubListComp
   menu_name: tools
   parent: reposi.listpub
+
+reposi.keyword:
+  title: 'Keyword list'
+  route_name: reposi.Reposi_list_keyword
+  menu_name: tools
+  parent: reposi
