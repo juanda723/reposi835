@@ -189,7 +189,7 @@ public function reposi_info_article_free(){
   $markup .= '<li>'. '<i>'. t('Date: ') . '</i>' . $format_date . '</li>';
   if (!empty($info_publi_2['abd_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi_2['abd_url'], $info_publi_2['abd_url']) . '</li>';
+               \Drupal::l($info_publi_2['abd_url'],Url::fromUri($info_publi_2['abd_url'])) . '</li>';
   }
   if (!empty($info_publi_2['abd_doi'])) {
     $markup .= '<li>'. '<i>'. t('DOI: ') . '</i>' . $info_publi_2['abd_doi'] . '</li>';
@@ -465,7 +465,7 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
   }
   if (!empty($info_publi_2['abd_url'])) {
     $markup .= '<li>'. '<i>'. t('URL: ') . '</i>' .
-               l($info_publi_2['abd_url'], $info_publi_2['abd_url']) . '</li>';
+               \Drupal::l($info_publi_2['abd_url'], Url::fromUri($info_publi_2['abd_url'])) . '</li>';
   }
   if (!empty($info_publi_2['abd_doi'])) {
     $markup .= '<li>'. '<i>'. t('DOI: ') . '</i>' . $info_publi_2['abd_doi'] . '</li>';

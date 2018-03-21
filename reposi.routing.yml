@@ -33,11 +33,75 @@ reposi.add_article:
   requirements:
     _permission: 'access content'
 
+reposi.edit_article:
+  path: 'reposi/article/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_article_edit_form'
+    _title: 'Edit article'
+  requirements:
+    _permission: 'access content'
+
+reposi.confirm_article:
+  path: 'reposi/article/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_article_confirm'
+    _title: 'Article update'
+  requirements:
+    _permission: 'access content'
+
+reposi.edit_book:
+  path: 'reposi/book/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_book_edit_form'
+    _title: 'Edit book'
+  requirements:
+    _permission: 'access content'
+
+reposi.confirm_book:
+  path: 'reposi/book/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_book_confirm'
+    _title: 'Book update confirm'
+  requirements:
+    _permission: 'access content'
+
+reposi.edit_chap_book:
+  path: 'reposi/chap_book/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_chap_book_edit_form'
+    _title: 'Edit chap book'
+  requirements:
+    _permission: 'access content'
+
+reposi.confirm_chap_book:
+  path: 'reposi/chap_book/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_chap_book_confirm'
+    _title: 'Chap book update confirm'
+  requirements:
+    _permission: 'access content'
+
 reposi.add_conference:
   path: 'reposi/conference'
   defaults:
     _form: '\Drupal\reposi\Form\Reposi_conference_form'
     _title: 'Add conference'
+  requirements:
+    _permission: 'access content'
+
+reposi.edit_conference:
+  path: 'reposi/conference/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_conference_edit_form'
+    _title: 'Edit conference'
+  requirements:
+    _permission: 'access content'
+
+reposi.confirm_conference:
+  path: 'reposi/conference/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_conference_confirm'
+    _title: 'Conference update'
   requirements:
     _permission: 'access content'
 
@@ -47,7 +111,55 @@ reposi.add_una_thesis:
     _form: '\Drupal\reposi\Form\Reposi_thesis'
     _title: 'Add thesis'
   requirements:
+    _permission: 'administer content'
+
+reposi.edit_thesis:
+  path: 'reposi/thesis/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_thesis_edit_form'
+    _title: 'Edit thesis'
+  requirements:
     _permission: 'access content'
+
+reposi.confirm_thesis:
+  path: 'reposi/thesis/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_thesis_confirm'
+    _title: 'Thesis update'
+  requirements:
+    _permission: 'access content'
+
+reposi.edit_patent:
+  path: 'reposi/patent/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_patent_edit_form'
+    _title: 'Edit patent'
+  requirements:
+    _permission: 'administer content'
+
+reposi.confirm_patent:
+  path: 'reposi/patent/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_patent_confirm'
+    _title: 'Patent update'
+  requirements:
+    _permission: 'administer content'
+
+reposi.edit_software:
+  path: 'reposi/software/{node}/edit'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_software_edit_form'
+    _title: 'Edit software'
+  requirements:
+    _permission: 'administer content'
+
+reposi.confirm_software:
+  path: 'reposi/software/confirm'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_software_confirm'
+    _title: 'Software update'
+  requirements:
+    _permission: 'administer content'
 
 reposi.admuser:
   path: /reposi/admuser
@@ -122,6 +234,13 @@ reposi.useredit_admin:
   requirements:
     _permission: 'administer content'
 
+reposi.keywords:
+  path: 'reposi/keywords'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::reposi_list_keyword'
+    _title: 'Keywords list'
+  requirements:
+    _permission: 'administer content'
 
 ####################Juan###########################################
 

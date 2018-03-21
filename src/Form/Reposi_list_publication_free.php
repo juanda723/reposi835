@@ -25,7 +25,7 @@ class Reposi_list_publication_free extends FormBase {
     '#maxlength' => 511,
   );
  
-   $build['pager'] = [
+   $form['pager'] = [
    '#type' => 'pager',
    ];
 

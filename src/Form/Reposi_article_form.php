@@ -9,6 +9,7 @@ use Drupal\Core\Database\Query;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\reposi\Controller\Reposi_info_publication;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Implements an example form.
@@ -239,6 +240,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   );
   $form['url'] = array(
     '#title' => t('URL'),
+    '#description' => t('Example: https://www.example.com'),
     '#type' => 'textfield',
     '#maxlength' => 511,
   );
@@ -347,6 +349,13 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   if (empty($keyword)){
         drupal_set_message(t('One keyword is required as minimum.'), 'warning');
   }
+
+  $url=$form_state->getValue('url'); 
+  if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+  {
+   $form_state->setErrorByName('uri', t('The URL is not valid.'));
+  }
+
   }
   /**
    * {@inheritdoc}

@@ -200,16 +200,25 @@ class ReposiController {
     return array(
       '#type' => 'markup',
       '#markup' => t('Hello, World!'),
+
+ $query = db_select('reposi_user', 'p');
+  $query->fields('p', array('uid', 'u_first_name', 'u_first_lastname',
+                 'u_second_lastname', 'u_email'))
+        ->orderBy('u_first_name', 'ASC');//->limit(60)
+  $pager = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(20);
+  $results =$pager->execute()->fetchAll();
+
+
     );
   }*/
   //La siguiente muestra la lista de autores almacenados en el repositorio y los redirecciona para mostrar su información.
   function ListAuthor() {
   global $base_url;
-  $search_aut = db_select('reposi_author', 'a')->extend('Drupal\Core\Database\Query\PagerSelectExtender');
+  $search_aut = db_select('reposi_author', 'a');
   $search_aut->fields('a')
-              ->orderBy('a_first_lastname', 'ASC')
-              ->limit(25);
-  $authors = $search_aut->execute();
+              ->orderBy('a_first_lastname', 'ASC');
+  $pager = $search_aut->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(30);
+  $authors = $pager->execute();
   $flag_aut=0;
   foreach ($authors as $keyw) {
   	$flag_aut++;
@@ -238,10 +247,9 @@ class ReposiController {
     $display_aut = $author;
   }
   $markup = '<div>' . '</div>' . '<ul>' . $display_aut . '</ul>';
-  return array(
-      '#type' => 'markup',
-      '#markup' => t($markup),
-    );
+  $form['body'] = array('#markup' => $markup);
+  $form['pager'] = ['#type' => 'pager'];
+  return $form;
   }
 
 //La siguiente función muestra los metadatos de los autores almacenados en el repositorio.
@@ -492,6 +500,38 @@ function reposi_user_list(){
   );
   return $form;
 }
+
+//--------------------------------------------------------------------------------------------------------------
+function reposi_list_keyword() {
+  $search_keyw = db_select('reposi_keyword', 'k');
+  $search_keyw->fields('k')
+              ->orderBy('k_word', 'ASC');
+  $pager = $search_keyw->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(25);
+  $keywords = $pager->execute();
+  $flag_key=0;
+  foreach ($keywords as $keyw) {
+  	$flag_key++;
+  	if ($flag_key == 1) {
+      $keyws = '<li>'. t($keyw->k_word) . '</li>';
+    } else {
+      $keyws = $keyws . '<li>'. 
+                      t($keyw->k_word) . '</li>';
+    }
+  }
+  if (empty($keyws)) {
+    $display_keyw =  'Without keywords';
+  } else {
+    $display_keyw = $keyws;
+  }
+  $markup = '<div>' . '</div>' . '<ul>' . $display_keyw . '</ul>';
+  $form['body'] = array('#markup' => $markup);
+   $form['pager'] = ['#type' => 'pager'];
+  return $form;
+}
+//-----------------------------------------------------------------------------------------------------------------
+
+
+//--------------------------------------------------------------------------------------------------------------
 
   // CIERRA LA CLASE
   }
