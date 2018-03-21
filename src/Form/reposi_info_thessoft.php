@@ -58,7 +58,17 @@ class reposi_info_thessoft extends FormBase {
 public function editForm(array &$form, FormStateInterface $form_state) {
     //Edicion Formulario
     $arg=\Drupal::routeMatch()->getParameter('node');
-    $form_state->setRedirect('reposi.Reposi_info_publicationAF', ['node' => $arg]);
+      $serch_p = db_select('reposi_publication', 'p');
+      $serch_p->fields('p')
+        ->condition('p.p_tsid', $arg, '=');
+      $serch_publi = $serch_p->execute()->fetchField();
+      $info_publi = $serch_p->execute()->fetchAssoc();
+      $idpub = $info_publi['p_type'];
+      if ($idpub=='Thesis') {
+   	 $form_state->setRedirect('reposi.edit_thesis', ['node' => $arg]);
+      }elseif ($idpub=='Software') {
+    	 $form_state->setRedirect('reposi.edit_software', ['node' => $arg]);
+      }
 }
 
 function Validate_Unvalidated($form, &$form_state){

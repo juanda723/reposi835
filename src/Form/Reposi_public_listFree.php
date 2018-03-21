@@ -27,7 +27,8 @@ class Reposi_public_listFree extends FormBase {
     global $base_url;
     $form['search'] = array(
       '#title' => t('Search'),
-      '#type' => 'fieldset',
+       '#type' => 'details',
+      '#open' => TRUE,
     );
     $form['search']['search_field'] = array(
       '#title' => t('Search on title'),
@@ -180,9 +181,18 @@ class Reposi_public_listFree extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-$titlesearch = $form_state->getValue('search_field');
-$form_state->setRedirect('reposi.PubliListReposiSearch', ['node' => $titlesearch]);
-  //-------------------------------------------------------------------------------------------------------------------------
+
+  $field_bit = explode(' ', $form_state->getValue('search_field'));
+  $searching = implode('-', $field_bit);
+  if (empty($searching)){
+    $form_state->setRedirect('reposi');
+    drupal_set_message(t('No records'),'error');
+  }
+  else
+  {
+    $form_state->setRedirect('reposi.PubliListReposiSearch', ['node' => $searching]);
+  }
+
   }
 // Llave que cierra la clase:--->
 }

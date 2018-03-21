@@ -30,7 +30,7 @@ class reposi_patent_confirm extends ConfirmFormBase{
      * {@inheritdoc}
      */
     public function getCancelUrl() {
-        return new Url('reposi.add_conference');
+        return new Url('reposi.Reposi_public_list');
     }
 
     /**
@@ -210,5 +210,6 @@ class reposi_patent_confirm extends ConfirmFormBase{
     }
 
            drupal_set_message(t('The patent was updated.'));
+           $form_state->setRedirect('reposi.Reposi_patinformation', ['node' => $pat_id]);
 }
 }

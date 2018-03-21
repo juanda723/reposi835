@@ -57,8 +57,19 @@ class reposi_info_conpat extends FormBase {
 //end buildForm
 public function editForm(array &$form, FormStateInterface $form_state) {
     //Edicion Formulario
-    $arg=\Drupal::routeMatch()->getParameter('node');
-    $form_state->setRedirect('reposi.Reposi_info_publicationAF', ['node' => $arg]);
+      $arg=\Drupal::routeMatch()->getParameter('node');
+      $serch_p = db_select('reposi_publication', 'p');
+      $serch_p->fields('p')
+        ->condition('p.p_cpid', $arg, '=');
+      $serch_publi = $serch_p->execute()->fetchField();
+      $info_publi = $serch_p->execute()->fetchAssoc();
+      $idpub = $info_publi['p_type'];
+      if ($idpub=='Conference') {
+   	    $form_state->setRedirect('reposi.edit_conference', ['node' => $arg]);
+      }elseif ($idpub=='Patent') {
+	    $form_state->setRedirect('reposi.edit_patent', ['node' => $arg]);
+      }
+
 }
 
 function Validate_Unvalidated($form, &$form_state){

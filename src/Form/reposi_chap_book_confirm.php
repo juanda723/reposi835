@@ -30,7 +30,7 @@ class reposi_chap_book_confirm extends ConfirmFormBase{
      * {@inheritdoc}
      */
     public function getCancelUrl() {
-        return new Url('reposi.add_article');
+        return new Url('reposi.Reposi_public_list');
     }
 
     /**
@@ -263,5 +263,6 @@ class reposi_chap_book_confirm extends ConfirmFormBase{
       }
     } 
            drupal_set_message(t('The publication was updated.'));
+           $form_state->setRedirect('reposi.Reposi_chapinformation', ['node' => $chap_id]);
 }
 }
