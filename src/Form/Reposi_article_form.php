@@ -349,8 +349,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   if (empty($keyword)){
         drupal_set_message(t('One keyword is required as minimum.'), 'warning');
   }
-
-  $url=$form_state->getValue('url'); 
+  $url=$form_state->getValue('url');
   if(!empty($url) && !UrlHelper::isValid($url, TRUE))
   {
    $form_state->setErrorByName('uri', t('The URL is not valid.'));

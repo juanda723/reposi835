@@ -184,7 +184,7 @@ function reposi_format_ris(){
     $info_publi_2 = $search_chap_detail->execute()->fetchAssoc();
     $search_p_a_chap = db_select('reposi_publication_author', 'pa');
     $search_p_a_chap->fields('pa')
-                  ->condition('pa.ap_abid', $info_publication['(Lp_abid'], '=');
+                  ->condition('pa.ap_abid', $info_publication['p_abid'], '=');
     $couple_chap = $search_p_a_chap->execute();
     $authors_chap = array();
     foreach ($couple_chap as $aut_chap) {

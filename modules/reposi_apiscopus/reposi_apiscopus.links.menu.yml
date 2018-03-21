@@ -1,0 +1,11 @@
+reposi.reposi_apiscopus.author_scopuslink:
+  title: 'Find ID author on Scopus'
+  route_name: reposi.reposi_apiscopus.author_scopus
+  menu_name: tools
+  parent: reposi
+
+eposi.reposi_apiscopus.admin:
+  title: 'Configuration to API Scopus'
+  route_name: reposi.reposi_apiscopus.scopus_admin
+  description: 'Configure the firstmod module'
+  parent: system.admin_config_system

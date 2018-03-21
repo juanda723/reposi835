@@ -1,0 +1,14 @@
+<?php
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+function _reposi_apiscopus_user_role_administrator() {
+  global $user;
+  $roles = array('administrator');
+  foreach ($roles as $role) {
+    if (in_array($role, $user->roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}

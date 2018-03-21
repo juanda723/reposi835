@@ -5,7 +5,11 @@ namespace Drupal\reposi\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Database\Query;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\reposi\Controller\Reposi_info_publication;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Implements an example form.
@@ -65,7 +69,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
       $form['author'] = array(
           '#type' => 'details',
           '#open' => TRUE,
-          '#title' => t('Authors'),
+          '#title' => t('Originator'),
           '#prefix' => '<div id="modules-wrapper">',
           '#suffix' => '</div>',
         );
@@ -133,6 +137,10 @@ public function buildForm(array $form, FormStateInterface $form_state) {
         );
 
 ////////Patent
+$form['abstract'] = array(
+  '#title' => t('Abstract'),
+  '#type' => 'textarea',
+);
 $form['owner'] = array(
   '#title' => t('Owner'),
   '#type' => 'textfield',
@@ -148,6 +156,7 @@ $form['num'] = array(
 );
 $form['url'] = array(
   '#title' => t('URL'),
+  '#description' => t('Example: https://www.example.com'),
   '#type' => 'textfield',
   '#maxlength' => 511,
 );
@@ -220,7 +229,12 @@ public function validateForm(array &$form, FormStateInterface $form_state) {
       $form_state->setErrorByName('first_name', t('One author is required as minimum
       (first name and last name).'));
     }
-
+    ///validate Url
+      $url=$form_state->getValue('url');
+      if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+      {
+       $form_state->setErrorByName('uri', t('The URL is not valid.'));
+      }
 
 }
 public function submitForm(array &$form, FormStateInterface $form_state) {

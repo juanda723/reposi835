@@ -9,6 +9,7 @@ use Drupal\Core\Database\Query;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\reposi\Controller\Reposi_info_publication;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Implements an example form.
@@ -22,14 +23,13 @@ class Reposi_conference_form extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
 /*ISSET: Determina si una variable está definida y no es NULL.
-$form_state['storage']: Los datos colocados en el contenedor de almacenamiento de la colección $ form_state se almacenarán automáticamente en caché y se volverán a cargar cuando se envíe el formulario, permitiendo que su código acumule datos de paso a paso y lo procese en la etapa final sin ningún código adicional 
-ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABLE ESTÁ DEBIDAMENTE DECLARADA CON ANTERIORIDAD 
+$form_state['storage']: Los datos colocados en el contenedor de almacenamiento de la colección $ form_state se almacenarán automáticamente en caché y se volverán a cargar cuando se envíe el formulario, permitiendo que su código acumule datos de paso a paso y lo procese en la etapa final sin ningún código adicional
+ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABLE ESTÁ DEBIDAMENTE DECLARADA CON ANTERIORIDAD
       $form_state['storage']['author'] = isset($form_state['storage']['author'])?
                                          $form_state['storage']['author']:1;*/
 
   $_reposi_start_form=TRUE;
-  $markup = '<p>' . '<i>' . t('You must complete the required fields before the 
-            add authors or keywords.') . '</i>' . '</p>';
+  $markup = '<p>' . '<i>' . t('You must complete the required fields before the add authors or keywords.') . '</i>' . '</p>';
   $form['body'] = array('#markup' => $markup);
   $form['title'] = array(
     '#title' => t('Title presentation/publication'),
@@ -234,6 +234,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
     '#title' => t('Year'),
     '#type' => 'textfield',
     '#size' => 5,
+    '#required' => TRUE,
     '#description' => t('Four numbers'),
   );
   $form['end_date'] = array(
@@ -257,6 +258,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
     '#title' => t('Year'),
     '#type' => 'textfield',
     '#size' => 5,
+    '#required' => TRUE,
     '#description' => t('Four numbers'),
   );
 
@@ -285,6 +287,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
 
   $form['url'] = array(
     '#title' => t('URL'),
+    '#description' => t('Example: https://www.example.com'),
     '#type' => 'textfield',
     '#maxlength' => 511,
   );
@@ -301,12 +304,12 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   /******************************************************************/
 
 //--------------------------------------------------------------------------------------------------------
-   
+
 //--------------------------------------------------------------------------------------------------------
    return $form;
 
   }
- 
+
   public function addfieldsubmit(array &$form, FormStateInterface &$form_state) {
     $max = $form_state->get('fields_count') + 1;
     $form_state->set('fields_count',$max);
@@ -352,60 +355,60 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   $day_validate = $form_state->getValue('day');
   $start_day_validate = $form_state->getValue('start_day');
   $end_day_validate = $form_state->getValue('end_day');
-  if(!empty($day_validate) && (!is_numeric($day_validate) || 
+  if(!empty($day_validate) && (!is_numeric($day_validate) ||
       $day_validate > '31' || $day_validate < '1')) {
     $form_state->setErrorByName('day_conference', t('It is not an allowable value for day.'));
-  } 
-  if(!empty($start_day_validate) && (!is_numeric($start_day_validate) || 
+  }
+  if(!empty($start_day_validate) && (!is_numeric($start_day_validate) ||
       $start_day_validate > '31' || $start_day_validate < '1')) {
     $form_state->setErrorByName('start_day', t('It is not an allowable value for start day.'));
-  } 
-  if(!empty($end_day_validate) && (!is_numeric($end_day_validate) || 
+  }
+  if(!empty($end_day_validate) && (!is_numeric($end_day_validate) ||
       $end_day_validate > '31' || $end_day_validate < '1')) {
     $form_state->setErrorByName('end_day', t('It is not an allowable value for end day.'));
-  } 
-  
+  }
+
   $month_validate =  $form_state->getValue('month');
   $start_month_validate = $form_state->getValue('start_month');
   $end_month_validate = $form_state->getValue('end_month');
-  if(!empty($month_validate) && (!is_numeric($month_validate) || 
+  if(!empty($month_validate) && (!is_numeric($month_validate) ||
       $month_validate > '12' || $month_validate < '1')) {
     $form_state->setErrorByName('month', t('It is not an allowable value for month.'));
-  } 
-  if(!empty($start_month_validate) && (!is_numeric($start_month_validate) || 
+  }
+  if(!empty($start_month_validate) && (!is_numeric($start_month_validate) ||
       $start_month_validate > '12' || $start_month_validate < '1')) {
     $form_state->setErrorByName('start_month', t('It is not an allowable value for start month.'));
-  } 
-  if(!empty($end_month_validate) && (!is_numeric($end_month_validate) || 
+  }
+  if(!empty($end_month_validate) && (!is_numeric($end_month_validate) ||
       $end_month_validate > '12' || $end_month_validate < '1')) {
     $form_state->setErrorByName('end_month', t('It is not an allowable value for end month.'));
-  } 
+  }
 
   $year_validate = $form_state->getValue('year');
   $start_year_validate = $form_state->getValue('start_year');
   $end_year_validate = $form_state->getValue('end_year');
-  if(!is_numeric($year_validate) || $year_validate > '9999' || 
+  if(!is_numeric($year_validate) || $year_validate > '9999' ||
       $year_validate < '1000') {
     $form_state->setErrorByName('year', t('It is not an allowable value for year.'));
   }
-  if(!empty($start_year_validate) && (!is_numeric($start_year_validate) || $start_year_validate > '9999' || 
+  if(!empty($start_year_validate) && (!is_numeric($start_year_validate) || $start_year_validate > '9999' ||
       $start_year_validate < '1000')) {
     $form_state->setErrorByName('year', t('It is not an allowable value for start year.'));
   }
-  if(!empty($end_year_validate) && (!is_numeric($end_year_validate) || $end_year_validate > '9999' || 
+  if(!empty($end_year_validate) && (!is_numeric($end_year_validate) || $end_year_validate > '9999' ||
       $end_year_validate < '1000')) {
     $form_state->setErrorByName('year', t('It is not an allowable value for end year.'));
   }
 
 
   $startp_validate = $form_state->getValue('start_page');
-  if(!empty($startp_validate) && (!is_numeric($startp_validate) || 
+  if(!empty($startp_validate) && (!is_numeric($startp_validate) ||
       $startp_validate < '0')){
     $form_state->setErrorByName('con_start_page', t('Start page is a numerical field.'));
   }
 
   $finalp_validate = $form_state->getValue('final_page');
-  if(!empty($finalp_validate) && (!is_numeric($finalp_validate) || 
+  if(!empty($finalp_validate) && (!is_numeric($finalp_validate) ||
       $finalp_validate < '0')){
     $form_state->setErrorByName('con_final_page', t('Final page is a numerical field.'));
   }
@@ -414,10 +417,15 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   $first_name_validate=$table[0]['first_name'];
   $first_lastname_validate=$table[0]['f_lastname'];
   if (empty($first_name_validate) || empty($first_lastname_validate)){
-    $form_state->setErrorByName('first_name', t('One author is required as minimum 
+    $form_state->setErrorByName('first_name', t('One author is required as minimum
     (first name and last name).'));
   }
-
+  //Url validate re use Drupal\Component\Utility\UrlHelper;
+    $url=$form_state->getValue('url');
+    if(!empty($url) && !UrlHelper::isValid($url, TRUE))
+    {
+     $form_state->setErrorByName('uri', t('The URL is not valid.'));
+    }
 
   }
   /**
@@ -563,9 +571,9 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   $first_lastname_validate=$table[$a]['f_lastname'];
   $aut_fn=$table[$a]['first_name'];
   $aut_sn=$table[$a]['second_name'];
-  $aut_fl=$table[$a]['f_lastname']; 
+  $aut_fl=$table[$a]['f_lastname'];
   $aut_sl=$table[$a]['s_lastname'];
- 
+
    !empty($aut_fn)?$aut_fn:'';
    !empty($aut_sn)?$aut_sn:'';
    !empty($aut_fl)?$aut_fl:'';
@@ -608,7 +616,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
       }
     } else {
       if(isset($table[$a]['first_name']) || isset($table[$a]['f_lastname'])){
-        drupal_set_message(t('The authors without first name or first 
+        drupal_set_message(t('The authors without first name or first
         last name will not be save.'), 'warning');
       }
     }
@@ -619,8 +627,8 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
       $form_state->set('fields_keyword_count', $max);
     }
 
- 
-  for ($q = 0; $q <= $maxkeyword ; $q++) { 
+
+  for ($q = 0; $q <= $maxkeyword ; $q++) {
   $keyword = $form_state->getValue('keywordtable');
     if (!empty($keyword[$q]['key'])) {
       $keywords[] = $keyword[$q]['key'];
@@ -656,12 +664,12 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
         ))->execute();
       }
       $cont_keywords++;
-    } 
-  }   
+    }
+  }
 
   drupal_set_message(t('Conference: ') . $title . t(' was save.'));
 
-  
+
 
 //-------------------------------------------------------------------------------------------------------------------------
   }

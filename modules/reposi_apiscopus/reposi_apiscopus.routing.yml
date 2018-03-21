@@ -1,0 +1,31 @@
+reposi.reposi_apiscopus.docs_scopus:
+  path: 'reposi/docs_scopus'
+  defaults:
+    _controller: 'Drupal\reposi_apiscopus\Controller\reposidoc_scopus::docs_scopus'
+    _title: 'Import metadata from documents'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apiscopus.scopus_assoc:
+  path: '/reposi/author_scopus/associate/{node}/{nod}'
+  defaults:
+    _form: '\Drupal\reposi_apiscopus\Form\reposi_author_scopus_assoc'
+    _title: 'Associate author'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apiscopus.author_scopus:
+  path: 'reposi/author_scopus'
+  defaults:
+    _controller: 'Drupal\reposi_apiscopus\Controller\reposidoc_scopus::reposi_author_scopus'
+    _title: 'Find ID author on Scopus'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apiscopus.scopus_admin:
+  path: 'admin/config/content/apiscopus'
+  defaults:
+    _form: '\Drupal\reposi_apiscopus\Form\reposi_apiscopus_admin'
+    _title: 'Configuration to API Scopus'
+  requirements:
+    _permission: 'administrator'
