@@ -36,7 +36,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
   	$form['reposi_apiscopus_key'] = array(
   		'#type' => 'textfield',
   		'#title' => t('API key'),
-  		'#default_value' => $form_state->getValue('reposi_apiscopus_key', ""),
+  		'#default_value' => $config->get('reposi_apiscopus_key', ""),
   		'#size' => 60,
   		'#maxlength' => 500,
   		'#required' => TRUE,
@@ -49,7 +49,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
       $form['reposi_apiscopus_size']['query_start'] = array(
   	    '#title' => t('Start'),
   	    '#type' => 'textfield',
-  	    '#default_value' => $form_state->getValue('query_start', 0),
+  	    '#default_value' => $config->get('query_start', 0),
   	    '#size' => 5,
   	    '#maxlength' => 3,
   	    '#required' => TRUE,
@@ -57,7 +57,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
   	$form['reposi_apiscopus_size']['query_final'] = array(
   	    '#title' => t('Final'),
   	    '#type' => 'textfield',
-  	    '#default_value' => $form_state->getValue('query_final', 200),
+  	    '#default_value' => $config->get('query_final', 200),
   	    '#size' => 5,
   	    '#maxlength' => 3,
   	    '#description' => t("Max value 200"),
@@ -70,7 +70,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
       					t('1 month.'),
                 t('3 months.'),
                 t('6 months.'),),
-      '#default_value' => $form_state->getValue('reposi_apiscopus_cron', 0),
+      '#default_value' => $config->get('reposi_apiscopus_cron', 0),
       '#required' => TRUE,
     );
 
@@ -105,7 +105,7 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
       ->set('reposi_apiscopus_key', $form_state->getValue('reposi_apiscopus_key'))
       ->set('query_start', $form_state->getValue('query_start'))
       ->set('query_final', $form_state->getValue('query_final'))
-      ->set('reposi_apiscopus_cron', $form_state->getValue('eposi_apiscopus_cron'))
+      ->set('reposi_apiscopus_cron', $form_state->getValue('reposi_apiscopus_cron'))
       ->save();
     parent::submitForm($form, $form_state);
   }

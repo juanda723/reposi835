@@ -4,12 +4,14 @@
  *
  */
 namespace Drupal\reposi_apiscopus\Controller;
- use Drupal\Core\Database;
- use Drupal\Core\Url;
- use Drupal\Core\Link;
- use Drupal\reposi\Controller\Reposi_info_publication;
+  use Drupal\Core\Database;
+  use Drupal\Core\Form\ConfigFormBase;
+  use Drupal\Core\Url;
+  use Drupal\Core\Link;
+  use Drupal\reposi\Controller\Reposi_info_publication;
+  use Drupal\reposi_apiscopus\Form\reposi_apiscopus_admin;
 
- class reposidoc_scopus{
+ class reposidoc_scopus extends reposi_apiscopus_admin{
 
 function docs_scopus(){
 	$apikey_scopus = \Drupal::state()->get('reposi_apiscopus_key');
@@ -595,9 +597,10 @@ function docs_scopus(){
 
 function reposi_author_scopus(){
 	global $base_url;
-	$apikey_scopus = \Drupal::state()->get('reposi_apiscopus_key');
-	$apikey_query_start = \Drupal::state()->get('query_start');
-	$apikey_query_final = \Drupal::state()->get('query_final');
+  $config = ConfigFormBase::config('system.maintenance');
+	$apikey_scopus = $config->get('reposi_apiscopus_key');
+	$apikey_query_start = $config->get('query_start');
+	$apikey_query_final = $config->get('query_final');
 	if (empty($apikey_scopus)) {
 		drupal_set_message('You must configure the module Repository -
 			Scopus Search API to use all its functions.', 'warning');
@@ -635,10 +638,10 @@ function reposi_author_scopus(){
 			    $aut_affil_name = array();
 			    $author_aff_place = array();
 			    $aut_affil_country = array();
-		    	$search_lastname_1 = Reposi_info_publication::reposi_author_string($authors_name['u_first_lastname']);
-				$search_lastname_2 = Reposi_info_publication::reposi_author_string($authors_name['u_second_lastname']);
-				$search_name_1 = Reposi_info_publication::reposi_author_string($authors_name['u_first_name']);
-				$search_name_2 = Reposi_info_publication::reposi_author_string($authors_name['u_second_name']);
+		    	$search_lastname_1 = Reposi_info_publication::reposi_string($authors_name['u_first_lastname']);
+				$search_lastname_2 = Reposi_info_publication::reposi_string($authors_name['u_second_lastname']);
+				$search_name_1 = Reposi_info_publication::reposi_string($authors_name['u_first_name']);
+				$search_name_2 = Reposi_info_publication::reposi_string($authors_name['u_second_name']);
 				if ((empty($search_name_2)) && (!empty($search_name_1))) {
 					$search_author_scopus = 'http://api.elsevier.com/content/search/author?query=authlastname(' .
 						$search_lastname_1 . '+' . $search_lastname_2 . ')+AND+authfirst(' . $search_name_1 .
@@ -834,7 +837,40 @@ function reposi_author_scopus(){
 		return $form;
 	}
 }
-
+public static function reposi_string($string) {
+    $string = trim($string);
+    $string = str_replace(
+      array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
+      array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
+      $string
+    );
+    $string = str_replace(
+      array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
+      array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
+      $string
+    );
+    $string = str_replace(
+      array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
+      array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
+      $string
+    );
+    $string = str_replace(
+      array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
+      array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
+      $string
+    );
+    $string = str_replace(
+      array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
+      array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
+      $string
+    );
+    $string = str_replace(
+      array('ñ', 'Ñ', 'ç', 'Ç'),
+      array('n', 'N', 'c', 'C',),
+      $string
+    );
+    return $string;
+  }
 
 //End class
 }
