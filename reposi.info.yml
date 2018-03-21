@@ -1,5 +1,13 @@
-name: reposi
-description: reposi
+name: R.B. Repository
+description: Repository to management of bibliographic references
 type: module
 core: 8.x
-package: reposi
+package: Repository
+
+dependencies:
+  - drupal:field
+  - drupal:options
+  - drupal:help
+version: '8.x-1.5'
+project: 'repository'
+datestamp: 1462893680

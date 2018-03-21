@@ -1,9 +1,10 @@
 <?php
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 
 function reposi_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
 {
 }
-
 
 function reposi_has_role() {
   global $user;
@@ -16,7 +17,7 @@ function reposi_has_role() {
   return FALSE;
 }
 
-function _reposi_user_role_administrator() { 
+function _reposi_user_role_administrator() {
   global $user;
   $roles = array('administrator');
   foreach ($roles as $role) {
@@ -26,4 +27,45 @@ function _reposi_user_role_administrator() {
   }
   return FALSE;
 }
+function reposi_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.reposi':
+  return reposi_help_content();
+  }
+}
+
+function reposi_help_content(){
+  $text = '<h3>' . t('Bibliography Reference Repository') . '</h3>' .
+          '<p align="justify">' . t('This module aims to simplify the capture bibliographic
+          information. The information is displayed in descending order by publication’s year.
+          There are seven types of content:') . '</p>' .
+          '<ul>' . '<li>' . 'Article.' . '</li>' .
+          '<li>' . 'Book.' . '</li>' .
+          '<li>' . 'Book Chapter.' . '</li>' .
+          '<li>' . 'Conference Paper.' . '</li>' .
+          '<li>' . 'Thesis.' . '</li>' .
+          '<li>' . 'Patent.' . '</li>' .
+          '<li>' . 'Software.' . '</li>' .'</ul>' .
+          '<p align="justify">' . t('There is a search option on the list of publications.
+          This looks for matches between the words entered and title of existing publications.')
+          . '</p>' . '<h3>' . t('Import') . '</h3>' . '<p align="justify">' .
+          t('This function allow get metadata publications through Scopus API. The stored data
+          correspond to publications of the repository users and with Scopus ID Author.') .
+          '</p>' . '<p align="justify">' . t('The frequency of search is select of the administrator.
+          He/She have four options: Never, 1 month, 3 months or 6 months. If choice never, he/she
+          can shot the search manually.') . '</p>' .
+          '<h3>' . t('Exporting Results') . '</h3>' . '<p align="justify">' .
+          t('Each content type offers the option to display the metadata in formats such as
+          RIS and BibTeX. If you need to see the a format, you must select the link at the
+          list of publications or detailed information.') . '</p>' .
+          '<h3>' . t('Configuration') . '</h3>' . '<p align="justify">' .
+          t('Go to Configuration -> Content authoring -> Configurationto API Scopus and
+          complete the form.') . '</p>' . '<p align="justify">' . t('The API Key is available on ')
+           . \Drupal::l(t('http://dev.elsevier.com'), Url::fromUri('http://dev.elsevier.com')) .
+          t(' but you need a web page online and Scopus subscription') . '</p>';
+  return ($text);
+}
+
+
+
 ?>

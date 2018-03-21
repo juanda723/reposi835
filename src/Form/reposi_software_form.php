@@ -49,7 +49,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
       $form['author'] = array(
           '#type' => 'details',
           '#open' => TRUE,
-          '#title' => t('Authors'),
+          '#title' => t('Producers'),
           '#prefix' => '<div id="modules-wrapper">',
           '#suffix' => '</div>',
         );

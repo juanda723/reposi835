@@ -1,0 +1,13 @@
+<?php
+
+function reposi_apiscopus_install() {}
+
+  function reposi_apiscopus_uninstall() {
+  	\Drupal::state()->delete('reposi_apiscopus_key');
+  	\Drupal::state()->delete('query_start');
+  	\Drupal::state()->delete('query_final');
+  	\Drupal::state()->delete('apikey_scopus');
+  	\Drupal::state()->delete('apikey_query_start');
+  	\Drupal::state()->delete('apikey_query_final');
+  	\Drupal::state()->delete('reposi_apiscopus_cron');
+  }

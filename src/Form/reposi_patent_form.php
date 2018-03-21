@@ -69,7 +69,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
       $form['author'] = array(
           '#type' => 'details',
           '#open' => TRUE,
-          '#title' => t('Authors'),
+          '#title' => t('Originator'),
           '#prefix' => '<div id="modules-wrapper">',
           '#suffix' => '</div>',
         );
@@ -137,6 +137,10 @@ public function buildForm(array $form, FormStateInterface $form_state) {
         );
 
 ////////Patent
+$form['abstract'] = array(
+  '#title' => t('Abstract'),
+  '#type' => 'textarea',
+);
 $form['owner'] = array(
   '#title' => t('Owner'),
   '#type' => 'textfield',
