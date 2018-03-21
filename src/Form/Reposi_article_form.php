@@ -28,9 +28,8 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
       $form_state['storage']['author'] = isset($form_state['storage']['author'])?
                                          $form_state['storage']['author']:1;*/
 
-  $_reposi_start_form=TRUE;
   $markup = '<p>' . '<i>' . t('You must complete the required fields before the
-            add authors or keywords.') . '</i>' . '</p>';
+            add producers.') . '</i>' . '</p>';
   $form['body'] = array('#markup' => $markup);
   $form['title'] = array(
     '#title' => t('Title'),

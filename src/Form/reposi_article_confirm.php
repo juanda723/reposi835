@@ -23,14 +23,14 @@ class reposi_article_confirm extends ConfirmFormBase{
      */
     public function getQuestion() {
 
-       return t('Article update'); 
+       return t('Article update confirmation'); 
     }
 
     /**
      * {@inheritdoc}
      */
     public function getCancelUrl() {
-        return new Url('reposi.add_article');
+        return new Url('reposi.Reposi_public_list');
     }
 
     /**
@@ -330,5 +330,6 @@ class reposi_article_confirm extends ConfirmFormBase{
       }
     }
            drupal_set_message(t('The publication was updated.'));
+           $form_state->setRedirect('reposi.Reposi_articleinformation', ['node' => $art_id]);
 }
 }

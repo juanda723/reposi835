@@ -59,8 +59,20 @@ class reposi_info_artboochap extends FormBase {
 //end buildForm
 public function editForm(array &$form, FormStateInterface $form_state) {
     //Edicion Formulario
-    $arg=\Drupal::routeMatch()->getParameter('node');
-    $form_state->setRedirect('reposi.Reposi_info_publicationAF', ['node' => $arg]);
+      $arg=\Drupal::routeMatch()->getParameter('node');
+      $serch_p = db_select('reposi_publication', 'p');
+      $serch_p->fields('p')
+        ->condition('p.p_abid', $arg, '=');
+      $serch_publi = $serch_p->execute()->fetchField();
+      $info_publi = $serch_p->execute()->fetchAssoc();
+      $idpub = $info_publi['p_type'];
+      if ($idpub=='Article') {
+    	  $form_state->setRedirect('reposi.edit_article', ['node' => $arg]);
+      }elseif ($idpub=='Book') {
+    	  $form_state->setRedirect('reposi.edit_book', ['node' => $arg]);
+      }elseif ($idpub=='Book Chapter') {
+    	  $form_state->setRedirect('reposi.edit_chap_book', ['node' => $arg]);
+      }
 }
 
 function Validate_Unvalidated($form, &$form_state){
