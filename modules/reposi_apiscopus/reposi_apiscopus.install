@@ -11,3 +11,4 @@ function reposi_apiscopus_install() {}
   	\Drupal::state()->delete('apikey_query_final');
   	\Drupal::state()->delete('reposi_apiscopus_cron');
   }
+?>

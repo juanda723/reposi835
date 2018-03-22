@@ -6,13 +6,21 @@ reposi:
   requirements:
     _permission: 'administer content'
 
+#reposi.PubliListReposiSearch:
+#  path: '/reposi/results/{node}'
+#  defaults:
+#    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_search'
+#    _title: 'Search results'
+#  requirements:
+#    _permission: 'administer content'
+
 reposi.PubliListReposiSearch:
   path: '/reposi/results/{node}'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_search'
+    _form: '\Drupal\reposi\Form\reposi_search_form'
     _title: 'Search results'
   requirements:
-    _permission: 'administer content'
+    _permission: 'access content'
 
 reposi.author:
   path: '/reposi/author'
@@ -105,7 +113,7 @@ reposi.confirm_conference:
   requirements:
     _permission: 'access content'
 
-reposi.add_una_thesis:
+reposi.add_thesis:
   path: 'reposi/thesis'
   defaults:
     _form: '\Drupal\reposi\Form\Reposi_thesis'
