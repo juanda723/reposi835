@@ -287,7 +287,7 @@ reposi.reposi_format_ris:
 reposi.Reposi_info_publicationAF:
   path: '/reposi/article/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_article_free'
+    _form: '\Drupal\reposi\Form\reposi_info_artboochap_free'
     _title: 'Article information'
   requirements:
     _permission: 'access content'
@@ -295,7 +295,7 @@ reposi.Reposi_info_publicationAF:
 reposi.Reposi_info_publicationBF:
   path: '/reposi/book/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_book_free'
+    _form: '\Drupal\reposi\Form\reposi_info_artboochap_free'
     _title: 'Book information'
   requirements:
     _permission: 'access content'
@@ -303,7 +303,7 @@ reposi.Reposi_info_publicationBF:
 reposi.Reposi_info_publicationCBF:
   path: '/reposi/chap_book/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_chap_book_free'
+    _form: '\Drupal\reposi\Form\reposi_info_artboochap_free'
     _title: 'Book Chapter information'
   requirements:
     _permission: 'access content'
@@ -311,15 +311,15 @@ reposi.Reposi_info_publicationCBF:
 reposi.Reposi_info_publicationCF:
   path: '/reposi/conference/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_conference_free'
-    _title: 'Conference Paper information'
+    _form: '\Drupal\reposi\Form\reposi_info_conpat_free'
+    _title: 'Conference information'
   requirements:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationTF:
   path: '/reposi/thesis/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_thesis_free'
+    _form: '\Drupal\reposi\Form\reposi_info_thessoft_free'
     _title: 'Thesis information'
   requirements:
     _permission: 'access content'
@@ -327,18 +327,18 @@ reposi.Reposi_info_publicationTF:
 reposi.Reposi_info_publicationPF:
   path: '/reposi/patent/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_patent_free'
-    _title: 'Patent information'
+    _form: '\Drupal\reposi\Form\reposi_info_conpat_free'
+    _title: 'Article information'
   requirements:
-    _permission: 'access content'
+    _permission: 'Patent content'
 
 reposi.Reposi_info_publicationSF:
   path: '/reposi/software/{node}/free'
   defaults:
-    _controller: '\Drupal\reposi\Controller\Reposi_info_publication::reposi_info_sw_free'
-    _title: 'Software information'
+    _form: '\Drupal\reposi\Form\reposi_info_thessoft_free'
+    _title: 'Article information'
   requirements:
-    _permission: 'access content'
+    _permission: 'Software content'
 
 reposi.Reposi_public_list:
   path: '/reposi/listpub'

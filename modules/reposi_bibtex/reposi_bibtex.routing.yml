@@ -1,0 +1,7 @@
+reposi.reposi_bibtex.bibt_format:
+  path: 'reposi/bibtex/{node}'
+  defaults:
+    _controller: 'Drupal\reposi_bibtex\Controller\reposi_bibtex_export::reposi_bibtex_format'
+    _title: 'BibTex'
+  requirements:
+    _permission: 'administrator'

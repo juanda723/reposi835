@@ -37,6 +37,9 @@ class reposi_info_artboochap extends FormBase {
         $hola=Reposi_info_publication::reposi_info_chap_book_free();
       }
       $form['body'] = array($hola);
+      $form['export'] = array(
+        '#markup' => '',
+      );
 
       $form['edit'] = array(
         '#type' => 'submit',

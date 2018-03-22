@@ -1,0 +1,38 @@
+<?php
+use Drupal\Core\Database;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+use Drupal\reposi\Controller\Reposi_info_publication;
+
+function reposi_bibtex_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state, $form_id){
+	global $base_url;
+	$publication_id = \Drupal::state()->get('publication_id');
+	if ($form_id == 'info_artboochap' ||
+		$form_id == 'info_thessoft' ||
+		$form_id == 'info_conpat' ||
+		$form_id == 'info_artboochap_free' ||
+		$form_id == 'info_thessoft_free' ||
+		$form_id == 'info_conpat_free'){
+	  if (null !== ($form_state->getStorage())) {
+	  	$form['export']['#markup'] .= ', ' . \Drupal::l(t('BibTeX'), Url::fromRoute('reposi.reposi_bibtex.bibt_format',['node'=> $publication_id])) . '<br>' . '<br>';
+	  }
+	}
+	if ($form_id == 'public_listFree' || $form_id == 'reposi_search_form') {
+		if ($form['body']['#markup'] <> '<p>No records</p>') {
+		    $each_publi=explode('</p>', $form['body']['#markup']);
+	  		$publication = array();
+	  		foreach ($each_publi as $publi) {
+			  if (!empty($publi)) {
+				$bit_bibtex = explode('ris/', $publi);
+				$id_bibtex = explode('">RIS', $bit_bibtex[1]);
+		  		$publication[] = $publi . '<small>' . ', ' . \Drupal::l(t('BibTeX'), Url::fromRoute('reposi.reposi_bibtex.bibt_format',['node'=> $id_bibtex[0]])) . '</small>';
+			  } else {
+			  	$publication[] = $publi;
+			  }
+	  		}
+	  		$new_publication = implode('</p>',$publication);
+			$form['body']['#markup'] = $new_publication;
+		}
+
+	}
+}

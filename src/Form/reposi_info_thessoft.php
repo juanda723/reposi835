@@ -35,7 +35,9 @@ class reposi_info_thessoft extends FormBase {
         $hola=Reposi_info_publication::reposi_info_sw_free();
       }
       $form['body'] = array($hola);
-
+      $form['export'] = array(
+        '#markup' => '',
+      );
       $form['edit'] = array(
         '#type' => 'submit',
         '#submit' => array([$this, 'editForm']),
