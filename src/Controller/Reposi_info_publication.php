@@ -234,9 +234,8 @@ $id_publication=t("Error");
 $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
 $risSend=\Drupal::l(t('RIS'),$url);
   $form['export'] = array(
-    '#type' => 'item',
     '#title' => t('Export formats: '),
-    '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
   );
   return $form;
 }
@@ -245,6 +244,8 @@ $risSend=\Drupal::l(t('RIS'),$url);
 
 public static function reposi_info_book_free(){
   $book_id = \Drupal::routeMatch()->getParameter('node');
+  $form_id='reposi_info_book_free';
+  //return $form_id;
   global $base_url;
   $form['pid'] = array(
     '#type' => 'value',
@@ -360,9 +361,8 @@ public static function reposi_info_book_free(){
   $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
   $risSend=\Drupal::l(t('RIS'),$url);
   $form['export'] = array(
-    '#type' => 'item',
     '#title' => t('Export formats: '),
-    '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
   );
   return $form;
 }
@@ -488,9 +488,8 @@ $chap_id = \Drupal::routeMatch()->getParameter('node');
   $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
   $risSend=\Drupal::l(t('RIS'),$url);
     $form['export'] = array(
-      '#type' => 'item',
       '#title' => t('Export formats: '),
-      '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
     );
 
   return $form;
@@ -633,9 +632,8 @@ public static function reposi_info_conference_free(){
   $risSend=\Drupal::l(t('RIS'),$url);
 
   $form['export'] = array(
-    '#type' => 'item',
     '#title' => t('Export formats: '),
-    '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
   );
   return $form;
 }
@@ -753,9 +751,8 @@ public static function reposi_info_thesis_free(){
   $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
   $risSend=\Drupal::l(t('RIS'),$url);
     $form['export'] = array(
-      '#type' => 'item',
       '#title' => t('Export formats: '),
-      '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
     );
   return $form;
 }
@@ -856,9 +853,8 @@ public static function reposi_info_patent_free(){
   $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
   $risSend=\Drupal::l(t('RIS'),$url);
     $form['export'] = array(
-      '#type' => 'item',
       '#title' => t('Export formats: '),
-      '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
     );
   return $form;
 }
@@ -953,9 +949,8 @@ public static function reposi_info_sw_free(){
   $url=Url::fromRoute('reposi.reposi_format_ris',['node'=>$id_publication]);
   $risSend=\Drupal::l(t('RIS'),$url);
     $form['export'] = array(
-      '#type' => 'item',
       '#title' => t('Export formats: '),
-      '#markup' => $risSend,
+    '#markup' => t('Export formats: ') . $risSend,
     );
   return $form;
 }

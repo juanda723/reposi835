@@ -1,0 +1,5 @@
+<?php
+
+function reposi_bibtex_install() {}
+
+function reposi_bibtex_uninstall() {}
