@@ -301,7 +301,7 @@ namespace Drupal\reposi_bibtex\Controller;
        $new_conference = reposi_bibtex_export::reposi_bibtex($info_publi['cp_title']);
        $content .= 'booktitle = "' . $new_conference . '",' .'<br>';
        if (isset($format_dates[0][0])) {
-         $new_month = reposi_month_letter($format_dates[0][0]);
+         $new_month = reposi_bibtex_export::reposi_month_letter($format_dates[0][0]);
          $content .= 'month = "' . $new_month . '",' .'<br>';
        }
        $content .= 'year = "' . $info_publication['p_year'] . '",' .'<br>';

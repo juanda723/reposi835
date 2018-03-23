@@ -14,9 +14,11 @@ namespace Drupal\reposi_apiscopus\Controller;
  class reposidoc_scopus extends reposi_apiscopus_admin{
 
 function docs_scopus(){
-	$apikey_scopus = \Drupal::state()->get('reposi_apiscopus_key');
-	$apikey_query_start = \Drupal::state()->get('query_start');
-	$apikey_query_final = \Drupal::state()->get('query_final');
+        $config = $this->config('system.maintenance');
+        $apikey_scopus = $config->get('reposi_apiscopus_key');
+	//$apikey_scopus = \Drupal::state()->get('reposi_apiscopus_key');
+	$apikey_query_start = $config->get('query_start');
+	$apikey_query_final = $config->get('query_final');
 	if (empty($apikey_scopus)) {
 		drupal_set_message('You must configure the module Repository -
 			Scopus Search API to use all its functions.', 'warning');
@@ -141,6 +143,7 @@ function docs_scopus(){
 					          ->condition('ab.ab_title', $title_doc_scopus[$i][0], '=');
 					    $find_art = $search_art->execute();
 					    $art_id = $find_art->fetchField();
+  					    $find_art -> allowRowCount = TRUE;
 					    $find_something = $find_art->rowCount();
 					    if ($find_something == '0') {
 					    	db_insert('reposi_article_book')->fields(array(
@@ -270,6 +273,7 @@ function docs_scopus(){
 					          ->condition('ab.ab_title', $title_doc_scopus[$i][0], '=');
 					    $find_book = $search_book->execute();
 					    $book_id = $find_book->fetchField();
+					    $find_book -> allowRowCount = TRUE;
 					    $find_something = $find_book->rowCount();
 					    if ($find_something == '0') {
 					    	db_insert('reposi_article_book')->fields(array(
@@ -402,6 +406,7 @@ function docs_scopus(){
           					  ->condition('ab.ab_subtitle_chapter', $title_doc_scopus[$i][0], '=');
 					    $find_chap = $search_chap->execute();
 					    $chap_id = $find_chap->fetchField();
+					    $find_chap -> allowRowCount = TRUE;
 					    $find_something = $find_chap->rowCount();
 					    if ($find_something == '0') {
 					    	db_insert('reposi_article_book')->fields(array(
@@ -588,7 +593,8 @@ function docs_scopus(){
               $form['pager']=['#type' => 'pager'];
 	    $form['doc'] = array(
 	      '#title' => t('Documents'),
-	      '#type' => 'fieldset',
+	      '#type' => 'details',
+	      '#open' => TRUE,
 	    );
 	    $form['doc']['body'] = array('#markup' => $info_show);
 		return $form;
@@ -719,7 +725,7 @@ function reposi_author_scopus(){
 							}
 
 							$all_authors_scopus_info .= '<tr>'. '<td>' . \Drupal::l($authors_eid_catch[$i][0],
-                Url::fromRoute('reposi.reposi_apiscopus.scopus_assoc',['node'=>$authors_name['uid']],['nod'=>$authors_eid_catch[$i][0]])) . '</td>' .
+                Url::fromRoute('reposi.reposi_apiscopus.scopus_assoc',['node'=>$authors_name['uid'],'nod'=>$authors_eid_catch[$i][0]])) . '</td>' .
 						  	'<td>' . $author_name[$i][0] . ', ' . $author_lname[$i][0] . '</td>' .
 						  	'<td>' . $affiliation_name . '. ' . $aut_country .
 						  	'</td>' . '</tr>';
@@ -796,7 +802,7 @@ function reposi_author_scopus(){
 									$affiliation_name = '';
 								}
 								$all_authors_scopus_info .= '<tr>'. '<td>' . \Drupal::l($authors_eid_catch[$i][0],
-                Url::fromRoute('reposi.reposi_apiscopus.scopus_assoc',['node'=>$authors_name['uid']],['nod'=>$authors_eid_catch[$i][0]])) . '</td>' .
+                Url::fromRoute('reposi.reposi_apiscopus.scopus_assoc',['node'=>$authors_name['uid'],'nod'=>$authors_eid_catch[$i][0]])) . '</td>' .
                 '</td>' . '<td>' . $author_name[$i][0] . ', ' . $author_lname[$i][0] .
 								'</td>' . '<td>' . $affiliation_name . '. ' . $aut_country .
 							  	'</td>' . '</tr>';
