@@ -592,7 +592,8 @@ function docs_scopus(){
               $form['pager']=['#type' => 'pager'];
 	    $form['doc'] = array(
 	      '#title' => t('Documents'),
-	      '#type' => 'fieldset',
+	      '#type' => 'details',
+	      '#open' => TRUE,
 	    );
 	    $form['doc']['body'] = array('#markup' => $info_show);
 		return $form;
