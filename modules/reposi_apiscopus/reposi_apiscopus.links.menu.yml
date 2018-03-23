@@ -4,8 +4,14 @@ reposi.reposi_apiscopus.author_scopuslink:
   menu_name: tools
   parent: reposi
 
-eposi.reposi_apiscopus.admin:
+reposi.reposi_apiscopus.admin:
   title: 'Configuration to API Scopus'
   route_name: reposi.reposi_apiscopus.scopus_admin
   description: 'Configure the firstmod module'
   parent: system.admin_config_system
+
+reposi.reposi_apiscopus.scopus_docs:
+  title: 'Import metadata from documents'
+  route_name: reposi.reposi_apiscopus.docs_scopus
+  menu_name: tools
+  parent: reposi

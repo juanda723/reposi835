@@ -1,6 +1,7 @@
 <?php
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\reposi_apiscopus\Controller\reposidoc_scopus;
 
 function _reposi_apiscopus_user_role_administrator() {
   global $user;
@@ -11,4 +12,23 @@ function _reposi_apiscopus_user_role_administrator() {
     }
   }
   return FALSE;
+}
+
+function reposi_cron(){
+	$reposi_apiscopus_cron = \Drupal::state()->get('reposi_apiscopus_cron');
+	if (isset($reposi_apiscopus_cron)) {
+		if ($reposi_apiscopus_cron == 1){
+			$less_month = 1;
+		} elseif ($reposi_apiscopus_cron == 2){
+			$less_month = 3;
+		} elseif ($reposi_apiscopus_cron == 3){
+			$less_month = 6;
+		}
+	} else {
+		$less_month = 12;
+	}
+	if (\Drupal::state()->get('apiscopus_function_last_run', 0) <= strtotime('-' . $less_month . ' month')) {
+		reposidoc_scopus::docs_scopus();
+		\Drupal::state()->set('apiscopus_function_last_run', time());
+	}
 }
