@@ -20,7 +20,7 @@ class reposi_search_form extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'reposi_search_form';
+    return 'reposi_search_form_id';
   }
 
   /**

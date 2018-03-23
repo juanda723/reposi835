@@ -17,7 +17,7 @@ function reposi_bibtex_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &
 	  	$form['export']['#markup'] .= ', ' . \Drupal::l(t('BibTeX'), Url::fromRoute('reposi.reposi_bibtex.bibt_format',['node'=> $publication_id])) . '<br>' . '<br>';
 	  }
 	}
-	if ($form_id == 'public_listFree' || $form_id == 'reposi_search_form') {
+	if ($form_id == 'public_listFree' /*|| $form_id == 'reposi_search_form_id'*/) {
 		if ($form['body']['#markup'] <> '<p>No records</p>') {
 		    $each_publi=explode('</p>', $form['body']['#markup']);
 	  		$publication = array();

@@ -38,22 +38,6 @@ class reposi_info_thessoft_free extends FormBase {
       $form['export'] = array(
         '#markup' => '',
       );
-      $form['edit'] = array(
-        '#type' => 'submit',
-        '#submit' => array([$this, 'editForm']),
-        '#value' => t('Edit'),
-      );
-      $form['validate'] = array(
-        '#type' => 'submit',
-        '#value' => t('Validate/Unvalidated'),
-        '#submit' => array([$this, 'Validate_Unvalidated']),
-      );
-      $form['delete'] = array(
-        '#type' => 'submit',
-        '#value' => t('Delete'),
-        '#submit' => array([$this, 'Delete']),
-      );
-
       return $form;
 }
 //end buildForm
