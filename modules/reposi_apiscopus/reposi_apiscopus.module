@@ -15,20 +15,39 @@ function _reposi_apiscopus_user_role_administrator() {
 }
 
 function reposi_cron(){
-	$reposi_apiscopus_cron = \Drupal::state()->get('reposi_apiscopus_cron');
-	if (isset($reposi_apiscopus_cron)) {
+
+$last_run_per_5_minuts = \Drupal::time()->getRequestTime();
+$config = \Drupal::config('system.maintenance');
+$reposi_apiscopus_cron = $config->get('reposi_apiscopus_cron');
+if (isset($reposi_apiscopus_cron)) {
 		if ($reposi_apiscopus_cron == 1){
-			$less_month = 1;
+			$less_month = 1*3600*24*30;
 		} elseif ($reposi_apiscopus_cron == 2){
-			$less_month = 3;
+			$less_month = 3*3600*24*30;
 		} elseif ($reposi_apiscopus_cron == 3){
-			$less_month = 6;
+			$less_month = 6*3600*24*30;
 		}
 	} else {
-		$less_month = 12;
+		$less_month = 12*3600*24*30;
 	}
-	if (\Drupal::state()->get('apiscopus_function_last_run', 0) <= strtotime('-' . $less_month . ' month')) {
-		reposidoc_scopus::docs_scopus();
-		\Drupal::state()->set('apiscopus_function_last_run', time());
-	}
+
+  $estae=\Drupal::state()->get('date_now_scopus');
+
+  if (!isset($estae) ){
+    $date_now=\Drupal::time()->getRequestTime();
+    \Drupal::state()->set('date_now_scopus',$date_now);
+    $date_event=$date_now+$less_month;
+    \Drupal::state()->set('date_event_scopus',$date_event);
+  }
+
+  $datete=\Drupal::state()->get('date_event_scopus');
+  $date=\Drupal::time()->getRequestTime();
+if ($datete<=$date){
+  $date_now=\Drupal::time()->getRequestTime();
+  reposidoc_scopus::testdocs_scopus(0, \Drupal::time()->getRequestTime());
+  \Drupal::state()->set('date_now_scopus',$date_now);
+  $date_event=$date_now+$less_month;
+  \Drupal::state()->set('date_event_scopus',$date_event);
+}
+
 }
