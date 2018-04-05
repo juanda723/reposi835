@@ -1,13 +1,13 @@
 reposi:
-  path: '/reposi'
+  path: 'reposi'
   defaults:
     _form: '\Drupal\reposi\Form\Reposi_public_listFree'
     _title: 'Repository'
   requirements:
-    _permission: 'administer content'
+    _permission: 'access content'
 
 #reposi.PubliListReposiSearch:
-#  path: '/reposi/results/{node}'
+#  path: 'reposi/results/{node}'
 #  defaults:
 #    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_search'
 #    _title: 'Search results'
@@ -15,7 +15,7 @@ reposi:
 #    _permission: 'administer content'
 
 reposi.PubliListReposiSearch:
-  path: '/reposi/results/{node}'
+  path: 'reposi/results/{node}'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_search_form'
     _title: 'Search results'
@@ -23,7 +23,7 @@ reposi.PubliListReposiSearch:
     _permission: 'access content'
 
 reposi.author:
-  path: '/reposi/author'
+  path: 'reposi/author'
   defaults:
     _controller: '\Drupal\reposi\Controller\ReposiController::ListAuthor'
     _title: 'Authors list'
@@ -39,7 +39,7 @@ reposi.add_article:
     _form: '\Drupal\reposi\Form\Reposi_article_form'
     _title: 'Add article'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.edit_article:
   path: 'reposi/article/{node}/edit'
@@ -47,7 +47,7 @@ reposi.edit_article:
     _form: '\Drupal\reposi\Form\reposi_article_edit_form'
     _title: 'Edit article'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.confirm_article:
   path: 'reposi/article/confirm'
@@ -55,7 +55,7 @@ reposi.confirm_article:
     _form: '\Drupal\reposi\Form\reposi_article_confirm'
     _title: 'Article update'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.edit_book:
   path: 'reposi/book/{node}/edit'
@@ -63,7 +63,7 @@ reposi.edit_book:
     _form: '\Drupal\reposi\Form\reposi_book_edit_form'
     _title: 'Edit book'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.confirm_book:
   path: 'reposi/book/confirm'
@@ -71,7 +71,7 @@ reposi.confirm_book:
     _form: '\Drupal\reposi\Form\reposi_book_confirm'
     _title: 'Book update confirm'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.edit_chap_book:
   path: 'reposi/chap_book/{node}/edit'
@@ -79,7 +79,7 @@ reposi.edit_chap_book:
     _form: '\Drupal\reposi\Form\reposi_chap_book_edit_form'
     _title: 'Edit chap book'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.confirm_chap_book:
   path: 'reposi/chap_book/confirm'
@@ -87,7 +87,7 @@ reposi.confirm_chap_book:
     _form: '\Drupal\reposi\Form\reposi_chap_book_confirm'
     _title: 'Chap book update confirm'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.add_conference:
   path: 'reposi/conference'
@@ -95,7 +95,7 @@ reposi.add_conference:
     _form: '\Drupal\reposi\Form\Reposi_conference_form'
     _title: 'Add conference'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.edit_conference:
   path: 'reposi/conference/{node}/edit'
@@ -103,7 +103,7 @@ reposi.edit_conference:
     _form: '\Drupal\reposi\Form\reposi_conference_edit_form'
     _title: 'Edit conference'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.confirm_conference:
   path: 'reposi/conference/confirm'
@@ -111,7 +111,7 @@ reposi.confirm_conference:
     _form: '\Drupal\reposi\Form\reposi_conference_confirm'
     _title: 'Conference update'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.add_thesis:
   path: 'reposi/thesis'
@@ -127,7 +127,7 @@ reposi.edit_thesis:
     _form: '\Drupal\reposi\Form\reposi_thesis_edit_form'
     _title: 'Edit thesis'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.confirm_thesis:
   path: 'reposi/thesis/confirm'
@@ -135,7 +135,7 @@ reposi.confirm_thesis:
     _form: '\Drupal\reposi\Form\reposi_thesis_confirm'
     _title: 'Thesis update'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.edit_patent:
   path: 'reposi/patent/{node}/edit'
@@ -170,7 +170,7 @@ reposi.confirm_software:
     _permission: 'administer content'
 
 reposi.admuser:
-  path: /reposi/admuser
+  path: reposi/admuser
   defaults:
     _form: 'Drupal\reposi\Form\Reposi_user_admin_form'
     _title: 'Repository'
@@ -258,7 +258,7 @@ reposi.add_book:
     _form: '\Drupal\reposi\Form\reposi_book_form'
     _title: 'add book'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.add_chap_book:
   path: 'reposi/chap_book'
@@ -266,7 +266,7 @@ reposi.add_chap_book:
     _form: '\Drupal\reposi\Form\reposi_chap_book_form'
     _title: 'Add book chapter'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.add_software:
   path: 'reposi/software'
@@ -274,7 +274,7 @@ reposi.add_software:
     _form: '\Drupal\reposi\Form\reposi_software_form'
     _title: 'Add software'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.add_patent:
   path: 'reposi/patent'
@@ -282,10 +282,10 @@ reposi.add_patent:
     _form: '\Drupal\reposi\Form\reposi_patent_form'
     _title: 'Add patent'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.reposi_format_ris:
-  path: '/reposi/ris/{node}'
+  path: 'reposi/ris/{node}'
   defaults:
     _controller: '\Drupal\reposi\Controller\Reposi_export::reposi_format_ris'
     _title: 'RIS'
@@ -293,7 +293,7 @@ reposi.reposi_format_ris:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationAF:
-  path: '/reposi/article/{node}/free'
+  path: 'reposi/article/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_artboochap_free'
     _title: 'Article information'
@@ -301,7 +301,7 @@ reposi.Reposi_info_publicationAF:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationBF:
-  path: '/reposi/book/{node}/free'
+  path: 'reposi/book/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_artboochap_free'
     _title: 'Book information'
@@ -309,7 +309,7 @@ reposi.Reposi_info_publicationBF:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationCBF:
-  path: '/reposi/chap_book/{node}/free'
+  path: 'reposi/chap_book/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_artboochap_free'
     _title: 'Book Chapter information'
@@ -317,7 +317,7 @@ reposi.Reposi_info_publicationCBF:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationCF:
-  path: '/reposi/conference/{node}/free'
+  path: 'reposi/conference/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_conpat_free'
     _title: 'Conference information'
@@ -325,7 +325,7 @@ reposi.Reposi_info_publicationCF:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationTF:
-  path: '/reposi/thesis/{node}/free'
+  path: 'reposi/thesis/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_thessoft_free'
     _title: 'Thesis information'
@@ -333,7 +333,7 @@ reposi.Reposi_info_publicationTF:
     _permission: 'access content'
 
 reposi.Reposi_info_publicationPF:
-  path: '/reposi/patent/{node}/free'
+  path: 'reposi/patent/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_conpat_free'
     _title: 'Article information'
@@ -341,7 +341,7 @@ reposi.Reposi_info_publicationPF:
     _permission: 'Patent content'
 
 reposi.Reposi_info_publicationSF:
-  path: '/reposi/software/{node}/free'
+  path: 'reposi/software/{node}/free'
   defaults:
     _form: '\Drupal\reposi\Form\reposi_info_thessoft_free'
     _title: 'Article information'
@@ -349,20 +349,20 @@ reposi.Reposi_info_publicationSF:
     _permission: 'Software content'
 
 reposi.Reposi_public_list:
-  path: '/reposi/listpub'
+  path: 'reposi/listpub'
   defaults:
     _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publication'
     _title: 'Publication list'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_PubListComp:
-  path: '/reposi/listpub/type'
+  path: 'reposi/listpub/type'
   defaults:
     _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_publi_list_complete'
     _title: 'Publication list by publication type'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_articleinformation:
   path: 'reposi/article/{node}'
@@ -370,7 +370,7 @@ reposi.Reposi_articleinformation:
     _form: '\Drupal\reposi\Form\reposi_info_artboochap'
     _title: 'Article information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_bookinformation:
   path: 'reposi/book/{node}'
@@ -378,7 +378,7 @@ reposi.Reposi_bookinformation:
     _form: '\Drupal\reposi\Form\reposi_info_artboochap'
     _title: 'Book information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_chapinformation:
   path: 'reposi/chap_book/{node}'
@@ -386,7 +386,7 @@ reposi.Reposi_chapinformation:
     _form: '\Drupal\reposi\Form\reposi_info_artboochap'
     _title: 'Chapter Book information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_coninformation:
   path: 'reposi/conference/{node}'
@@ -394,7 +394,7 @@ reposi.Reposi_coninformation:
     _form: '\Drupal\reposi\Form\reposi_info_conpat'
     _title: 'Conference information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_patinformation:
   path: 'reposi/patent/{node}'
@@ -402,7 +402,7 @@ reposi.Reposi_patinformation:
     _form: '\Drupal\reposi\Form\reposi_info_conpat'
     _title: 'Patent information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_thesinformation:
   path: 'reposi/thesis/{node}'
@@ -410,7 +410,7 @@ reposi.Reposi_thesinformation:
     _form: '\Drupal\reposi\Form\reposi_info_thessoft'
     _title: 'Thesis information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_sofinformation:
   path: 'reposi/software/{node}'
@@ -418,7 +418,7 @@ reposi.Reposi_sofinformation:
     _form: '\Drupal\reposi\Form\reposi_info_thessoft'
     _title: 'Software information'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_del_publi:
   path: 'reposi/delete/publication/{node}'
@@ -426,10 +426,10 @@ reposi.Reposi_del_publi:
     _form: '\Drupal\reposi\Form\reposi_delete_publi'
     _title: 'Publication Delete'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 reposi.Reposi_info_keyword:
-  path: '/reposi/keyword/{node}'
+  path: 'reposi/keyword/{node}'
   defaults:
     _controller: '\Drupal\reposi\Controller\Reposi_info_keyword::reposi_info_key'
     _title: 'Keyword information'
@@ -437,7 +437,7 @@ reposi.Reposi_info_keyword:
     _permission: 'access content'
 
 reposi.Reposi_list_keyword:
-  path: '/reposi/keyword'
+  path: 'reposi/keyword'
   defaults:
     _controller: '\Drupal\reposi\Controller\reposi_keyword_list::reposi_list_key'
     _title: 'Keyword information'
