@@ -196,10 +196,8 @@ public function buildForm(array $form, FormStateInterface $form_state) {
     $publications .= '<p>'. 'No matches'. '</p>';
   }
   $form['body'] = array('#markup' => $publications);
-      $form['export'] = array(
-        '#markup' => '',
-      );
-
+  $form['pid']= array('#type' => 'value',
+  		    '#value' => $ids,);
   $form['pager']=['#type' => 'pager'];     
 
     return $form;

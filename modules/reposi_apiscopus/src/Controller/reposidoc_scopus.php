@@ -14,7 +14,7 @@ namespace Drupal\reposi_apiscopus\Controller;
  class reposidoc_scopus extends reposi_apiscopus_admin{
 
 function docs_scopus(){
-  $config = $this->config('system.maintenance');
+        $config = \Drupal::config('system.maintenance');
 	$apikey_scopus = $config->get('reposi_apiscopus_key');
 	$apikey_query_start = $config->get('query_start');
 	$apikey_query_final = $config->get('query_final');

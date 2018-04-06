@@ -1,0 +1,31 @@
+menu_ui.link_add:
+  route_name: menu_ui.link_add
+  title: 'Add link'
+  appears_on:
+    - menu_ui.menu_edit
+
+menu_ui.menu_add:
+  route_name: menu_ui.menu_add
+  title: 'Add menu'
+  appears_on:
+    - menu_ui.overview_page
+
+node.reposi_add:
+  route_name: node.add
+  title: 'Add menu'
+  appears_on:
+    - view.node_add_page.page_1
+
+amidori_utils.add_content:
+  route_name: 'node.add'
+  title: 'Add content'
+  route_parameters:
+    node_type: 'blog'
+  appears_on:
+      - view.admin_blogs.page_1
+
+reposi.type_add.content:
+ route_name: node.add_reposi
+ title: 'Add content R. B. Repository'
+ appears_on:
+   - node.add_page

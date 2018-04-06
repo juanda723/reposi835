@@ -33,6 +33,14 @@ reposi.author:
 
 ##################3andrea##########################################
 
+node.add_reposi:
+  path: 'node/add/reposi'
+  defaults:
+    _form: '\Drupal\reposi\Form\reposi_add_content_form'
+    _title: 'Add content'
+  requirements:
+    _permission: 'access content'
+
 reposi.add_article:
   path: 'reposi/article'
   defaults:
