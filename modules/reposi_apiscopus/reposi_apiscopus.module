@@ -41,12 +41,13 @@ if (isset($reposi_apiscopus_cron)) {
 
   $datete=\Drupal::state()->get('date_event_scopus');
   $date=\Drupal::time()->getRequestTime();
-if ($datete<=$date){
+  $stateless=\Drupal::state()->get('date_event_scopus_1');
+if ( ($datete<=$date) || ($stateless!=$reposi_apiscopus_cron) ){
   $date_now=\Drupal::time()->getRequestTime();
   reposidoc_scopus::docs_scopus(0, \Drupal::time()->getRequestTime());
   \Drupal::state()->set('date_now_scopus',$date_now);
   $date_event=$date_now+$less_month;
   \Drupal::state()->set('date_event_scopus',$date_event);
 }
-
+\Drupal::state()->set('date_event_scopus_1',$reposi_apiscopus_cron);
 }
