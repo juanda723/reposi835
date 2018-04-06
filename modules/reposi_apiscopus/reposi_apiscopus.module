@@ -16,7 +16,6 @@ function _reposi_apiscopus_user_role_administrator() {
 
 function reposi_cron(){
 
-$last_run_per_5_minuts = \Drupal::time()->getRequestTime();
 $config = \Drupal::config('system.maintenance');
 $reposi_apiscopus_cron = $config->get('reposi_apiscopus_cron');
 if (isset($reposi_apiscopus_cron)) {
@@ -44,7 +43,7 @@ if (isset($reposi_apiscopus_cron)) {
   $date=\Drupal::time()->getRequestTime();
 if ($datete<=$date){
   $date_now=\Drupal::time()->getRequestTime();
-  reposidoc_scopus::testdocs_scopus(0, \Drupal::time()->getRequestTime());
+  reposidoc_scopus::docs_scopus(0, \Drupal::time()->getRequestTime());
   \Drupal::state()->set('date_now_scopus',$date_now);
   $date_event=$date_now+$less_month;
   \Drupal::state()->set('date_event_scopus',$date_event);
