@@ -22,7 +22,7 @@ function docs_scopus(){
 		drupal_set_message('You must configure the module Repository -
 			Scopus Search API to use all its functions.', 'warning');
 		$message = '<p>' . '<b>' . '<big>' . 'First enter the APIKey from the
-		configuration tab.' . '</big>'.'</b>'.'</p>'.$apikey_scopus;
+		configuration tab.' . '</big>'.'</b>'.'</p>';
 		$form['message'] = array('#markup' => $message);
 	    return $form;
 	} else {
@@ -876,6 +876,24 @@ public static function reposi_string($string) {
     );
     return $string;
   }
+///////
+  public static function testdocs_scopus(){
+    $search_publi = db_select('reposi_user','p');
+    $arg=3;
+    $search_publi->fields('p',array('u_id_scopus'))
+                 ->condition('uid',$arg, '=');
+    $idscopus = $search_publi->execute()->fetchField();
+    $pre=$idscopus;
+    $numeromas =88;
+    $idscopus=$idscopus.$numeromas;
+      db_update('reposi_user')->fields(array(
+        'u_id_scopus'  => $idscopus,
+      ))->condition('uid', $arg)
+      ->execute();
+      $message = '<p>' . '<b>' . '<big>' . 'Hola prueba que cambio. ' .$pre.'</big>'.'</b>'.'</p>'.$idscopus;
+  		$form['message'] = array('#markup' => $message);
+      return $form;
+}
 
 //End class
 }

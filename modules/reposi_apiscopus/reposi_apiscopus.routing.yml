@@ -6,6 +6,14 @@ reposi.reposi_apiscopus.docs_scopus:
   requirements:
     _permission: 'administrator'
 
+reposi.reposi_apiscopus.nodedocs_scopus:
+  path: 'reposi/docs_scopus/3'
+  defaults:
+    _controller: 'Drupal\reposi_apiscopus\Controller\reposidoc_scopus::testdocs_scopus'
+    _title: 'Usersss'
+  requirements:
+    _permission: 'administrator'
+
 reposi.reposi_apiscopus.scopus_assoc:
   path: '/reposi/author_scopus/associate/{node}/{nod}'
   defaults:
