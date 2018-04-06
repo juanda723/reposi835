@@ -56,7 +56,7 @@ public static function docs_scopus(){
 		    $num_book_chaps = 0;
 	    	if (!empty($id_scopus['u_id_scopus'])) {
 	    		$author_id = $id_scopus['u_id_scopus'];
-	    		$search_doc = 'http://api.elsevier.com/content/search/scopus?query=au-id(' .
+	    		$search_doc = 'https://api.elsevier.com/content/search/scopus?query=au-id(' .
 	    		$author_id . ')&start=' . $apikey_query_start . '&count=' . $apikey_query_final .
 	    		'&apikey=' . $apikey_scopus;
 	    		$get_info_docs = file_get_contents($search_doc);
@@ -501,7 +501,7 @@ public static function docs_scopus(){
 		$eid_doc = array_filter($eids_doc);
 		$simplify_docs = array_unique($eid_doc);
 		foreach ($simplify_docs as $docs) {
-			$url_scopus_abstract = 'http://api.elsevier.com/content/search/scopus?query=eid(' .
+			$url_scopus_abstract = 'https://api.elsevier.com/content/search/scopus?query=eid(' .
 			$docs .')&field=dc:description&apikey=' . $apikey_scopus;
 			$search_abstract = file_get_contents($url_scopus_abstract);
 			$pre_abstract = explode('dc:description":"', $search_abstract);
@@ -510,7 +510,7 @@ public static function docs_scopus(){
 			} else {
 				$abstract = array('');
 			}
-			$url_scopus_author = 'http://api.elsevier.com/content/search/scopus?query=eid(' .
+			$url_scopus_author = 'https://api.elsevier.com/content/search/scopus?query=eid(' .
 			$docs . ')&field=author&start=' . $apikey_query_start . '&count=' .
 			$apikey_query_final . '&apikey=' . $apikey_scopus;
 			$get_other_authors = file_get_contents($url_scopus_author);
@@ -648,12 +648,12 @@ function reposi_author_scopus(){
 				$search_name_1 = Reposi_info_publication::reposi_string($authors_name['u_first_name']);
 				$search_name_2 = Reposi_info_publication::reposi_string($authors_name['u_second_name']);
 				if ((empty($search_name_2)) && (!empty($search_name_1))) {
-					$search_author_scopus = 'http://api.elsevier.com/content/search/author?query=authlastname(' .
+					$search_author_scopus = 'https://api.elsevier.com/content/search/author?query=authlastname(' .
 						$search_lastname_1 . '+' . $search_lastname_2 . ')+AND+authfirst(' . $search_name_1 .
 						')&start=' . $apikey_query_start . '&count=' . $apikey_query_final . '&apikey=' .
 						$apikey_scopus;
 				} elseif ((!empty($search_name_2)) && (!empty($search_name_1))) {
-					$search_author_scopus = 'http://api.elsevier.com/content/search/author?query=authlastname(' .
+					$search_author_scopus = 'https://api.elsevier.com/content/search/author?query=authlastname(' .
 						$search_lastname_1 . '+' . $search_lastname_2 . ')+AND+authfirst(' . $search_name_1 .
 						'+' . $search_name_2 . ')&start=' . $apikey_query_start . '&count=' . $apikey_query_final .
 						'&apikey=' . $apikey_scopus;
@@ -732,7 +732,7 @@ function reposi_author_scopus(){
 						$all_authors_scopus_info .= '</table>' . '<br>';
 					} else {
 						if ((!empty($search_name_1)) && (!empty($search_lastname_1))) {
-							$search_author_scopus = 'http://api.elsevier.com/content/search/author?query=authlastname(' .
+							$search_author_scopus = 'https://api.elsevier.com/content/search/author?query=authlastname(' .
 								$search_lastname_1 . ')+AND+authfirst(' . $search_name_1 . ')&start=' .
 								$apikey_query_start . '&count=' . $apikey_query_final . '&apikey=' .
 								$apikey_scopus;

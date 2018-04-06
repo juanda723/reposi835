@@ -50,4 +50,6 @@ if ( ($datete<=$date) || ($stateless!=$reposi_apiscopus_cron) ){
   \Drupal::state()->set('date_event_scopus',$date_event);
 }
 \Drupal::state()->set('date_event_scopus_1',$reposi_apiscopus_cron);
+$time_for_event=floor(($datete-$date)/(3600*24));
+drupal_set_message("Next event Apiscopus in ".$time_for_event." days");
 }
