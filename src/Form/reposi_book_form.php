@@ -313,6 +313,7 @@ if (empty($first_name_validate) || empty($first_lastname_validate)){
       ))->execute();
       db_insert('reposi_publication')->fields(array(
           'p_type'  => 'Book',
+	  'p_source'=> 'Manual',
           'p_title' => $book_title,
           'p_year'  => $new_book_year,
           'p_check' => 1,

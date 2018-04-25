@@ -500,6 +500,7 @@ ESTÁ RETORNANDO EL VALOR DE 1 EN $form_state['storage']['author'] SI LA VARIABL
   ))->execute();
   db_insert('reposi_publication')->fields(array(
       'p_type'  => 'Conference',
+      'p_source'=> 'Manual',
       'p_title' => $title,
       'p_year'  => $year,
       'p_check' => 1,

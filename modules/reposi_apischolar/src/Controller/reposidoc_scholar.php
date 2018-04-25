@@ -3,63 +3,223 @@
  * Search metadata publications.
  *
  */
-namespace Drupal\reposi_apiscopus\Controller;
+namespace Drupal\reposi_apischolar\Controller;
   use Drupal\Core\Database;
   use Drupal\Core\Form\ConfigFormBase;
   use Drupal\Core\Url;
   use Drupal\Core\Link;
   use Drupal\reposi\Controller\Reposi_info_publication;
-  use Drupal\reposi_apiscopus\Form\reposi_apiscopus_admin;
+  use Drupal\reposi_apischolar\Form\reposi_apischolar_admin;
+  use Drupal\Component\Utility\Html;
+  use Drupal\Component\Serialization\Json;
+  use GuzzleHttp\Exception;
 
- class reposidoc_scopus extends reposi_apiscopus_admin{
+ class reposidoc_scholar extends reposi_apischolar_admin{
 
-public static function docs_scopus(){
+public static function docs_scholar(){
+$form['body'] = array();
+// http://cse.bth.se/~fer/googlescholar.php?user=Z9vU8awAAAAJ
         $config = \Drupal::config('system.maintenance');
-	$apikey_scopus = $config->get('reposi_apiscopus_key');
-	$apikey_query_start = $config->get('query_start');
-	$apikey_query_final = $config->get('query_final');
-	if (empty($apikey_scopus)) {
-		drupal_set_message('You must configure the module Repository -
-			Scopus Search API to use all its functions.', 'warning');
-		$message = '<p>' . '<b>' . '<big>' . 'First enter the APIKey from the
-		configuration tab.' . '</big>'.'</b>'.'</p>';
-		$form['message'] = array('#markup' => $message);
-	    return $form;
-	} else {
+	$apikey_query_start = $config->get('query_scholar_start');
+	$apikey_query_final = $config->get('query_scholar_final');
 		$search_author_state = db_select('reposi_state', 's');
 		$search_author_state->fields('s', array('s_uid'))
 		                    ->condition('s.s_type', 'Active', '=');
 		$id_author_active = $search_author_state->execute();
 		$author_full_name = array();
 		foreach ($id_author_active as $author_active) {
-		    $search_author_idscopus = db_select('reposi_user', 'p');
-		    $search_author_idscopus->fields('p', array('uid', 'u_first_name', 'u_second_name', 'u_first_lastname',
-		                   			  'u_second_lastname', 'u_id_scopus'))
+		    $search_author_idscholar = db_select('reposi_user', 'p');
+		    $search_author_idscholar->fields('p', array('uid', 'u_first_name', 'u_second_name', 'u_first_lastname',
+		                   			  'u_second_lastname', 'u_id_scholar'))
 						            ->condition('p.uid', $author_active->s_uid, '=')
 						            ->orderBy('u_first_lastname', 'ASC');
-						       $pager=$search_author_idscopus->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(10);
+						       $pager=$search_author_idscholar->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(10);
 		    $author_info[] = $pager->execute()->fetchAssoc();
 	    }
-	    $eid_doc_scopus = array();
-      $form['body'] = array();
+	    $eid_doc_scholar = array();
+	    $form['body'] = array();
 	    $num_articles = 0;
 		$num_books = 0;
 		$num_book_chaps = 0;
-	    foreach ($author_info as $id_scopus) {
-		    $title_doc_scopus = array();
-		    $pre_date_scopus = array();
-		    $date_scopus = array();
-		    $pre_type_scopus = array();
-		    $type_doc_scopus = array();
+	    foreach ($author_info as $id_scholar) {
+		    $title_doc_scholar = array();
+		    $pre_date_scholar = array();
+		    $date_scholar = array();
+		    $pre_type_scholar = array();
+		    $type_doc_scholar = array();
 		    $num_articles = 0;
 		    $num_books = 0;
 		    $num_book_chaps = 0;
-	    	if (!empty($id_scopus['u_id_scopus'])) {
-	    		$author_id = $id_scopus['u_id_scopus'];
-	    		$search_doc = 'https://api.elsevier.com/content/search/scopus?query=au-id(' .
-	    		$author_id . ')&start=' . $apikey_query_start . '&count=' . $apikey_query_final .
-	    		'&apikey=' . $apikey_scopus;
-	    		$get_info_docs = file_get_contents($search_doc);
+	    	if ($id_scholar['u_id_scholar']==!NULL) {
+	    		$author_id = $id_scholar['u_id_scholar'];
+			
+
+	    		$search_doc = 'http://localhost/googlescholar-api/gspublication.php?user='.$author_id;
+////////////
+			$client = \Drupal::httpClient();
+			$response = $client->get($search_doc, ['timeout' => 600]);
+			$data = $response->getBody();
+			$scholar_publication = explode('{', $data);
+			//$scholar_title = explode('{', $data);
+			$data_number = count($scholar_publication);
+                      //  echo print_r($scholar_publication,true. '  *******************LA CUENTA ES: ' .$data_number);
+			//$jsonData = json_encode($_POST);    
+			/*$headers = ['Content-Type' => 'application/json'];
+    			$response = $client->request('POST', $search_doc, ['timeout' => 600, 'headers'=>$headers,'body' => 						$jsonData]);
+			//  $response = $client->request('GET', '/delay/5', ['timeout' => 3.14]);
+    			$data = $response->getBody();
+			//$decoded = Json::decode($data);
+    			$scholar_user = explode('{', $data);
+    			$scholar_data = explode('"name": "', $data);
+			$data_number = count($scholar_data);
+			$scholar_info = explode('",',$data);
+			$header = array(t('Google Scholar ID'), t('Name'), t('Affiliation'));
+			drupal_set_message('user scholar:'.$author_id);*/
+
+//$link_scholar = \Drupal::l($scholar_id_user, Url::fromRoute('reposi.reposi_apischolar.scholar_assoc', ['node'=>$authors_name['uid'], 'nod'=>$scholar_id_user]));
+			for($i=2; $i<$data_number; $i++){
+	//		drupal_set_message($scholar_publication[$i]);
+			$scholar_doc = explode('",', $scholar_publication[$i]);
+			$scholar_doc_title1 = explode('"title": "', $scholar_doc[0]);
+			$scholar_doc_authors = explode('"authors": "', $scholar_doc[1]);
+			$scholar_doc_year = explode('"year": ', $scholar_doc[3]);
+		//	$scholar_doc_authors = substr($scholar_doc[1],-50,8);
+			$scholar_doc_title = $scholar_doc_title1[1];
+			$scholar_doc_authors = $scholar_doc_authors[1];
+			$scholar_doc_year = $scholar_doc_year[1];
+			$scholar_doc_year = substr($scholar_doc_year,-50,4);
+/*			$link_publication_scholar = \Drupal::l($scholar_doc_title, Url::fromRoute('reposi.reposi_apischolar.scholar_assoc', ['user'=>$author_id, 'pid'=>$scholar_id_user]));*/
+                        $form['doc'][$i] = array('#markup' => '<br><strong>'.$scholar_doc_title.'</strong>, '.$scholar_doc_authors.', <strong>'.		$scholar_doc_year.'</strong></br>');
+//                    if.................................
+			$form['title'][$i] = array('#value' => $scholar_doc_title);
+			$form['authors'][$i] = array('#value' => $scholar_doc_authors);
+			$form['year'][$i] = array('#value' => $scholar_doc_year);
+
+			$google_scholar_information = array('title'=>$scholar_doc_title,'authors'=>$scholar_doc_authors,'year'=>$scholar_doc_year);
+			$form['scholar_information'][$i] = array('#value' => $google_scholar_information);
+	//		drupal_set_message('$scholar_doc_title: '.$form['scholar_information'][$i]['#value']['title']);
+	//		drupal_set_message('$scholar_doc_title: '.$scholar_doc_title);
+
+/*			$search_pub = db_select('reposi_publication', 'p');
+			$search_pub->fields('p');
+			$find_pub = $search_pub->execute();
+	    		foreach ($form['title'] as $title_docs) {
+                                $title_doc_scholar[] = $title_docs['#value'];
+	    //			drupal_set_message('<br>$scholar_doc_title: '.$title_docs['#value'].'</br>');
+	    		}
+	    		foreach ($form['authors'] as $authors_docs) {
+				$authors_doc_scholar[] = $authors_docs['#value'];
+	    //			drupal_set_message('<br>$scholar_doc_title: '.$authors_docs['#value'].'</br>');
+	    		}
+	    		foreach ($form['year'] as $year_docs) {
+				$year_doc_scholar[] = $year_docs['#value'];
+	    		//	drupal_set_message('year '.$year_docs['#value'].'</br>');
+	    		}
+	    		foreach ($form['scholar_information'] as $scholar_information) {
+				$gs_scholar_information[] = $scholar_information['#value'];
+	    		 	drupal_set_message('year '.print_r($gs_scholar_information,true).'</br>');
+	    		}*/
+			$search_pub = db_select('reposi_publication', 'p');
+			$search_pub->fields('p');
+			$find_pub = $search_pub->execute();
+			$cuenta=count($find_pub);
+				$count_pub=0;
+			foreach ($find_pub as $pub) {
+				$count_pub++;
+			}
+			drupal_set_message('cuentaaAA:'.$count_pub);
+			if($count_pub>0)
+			{
+		        foreach ($find_pub as $list_p) {
+     	                $pub_title = $list_p->p_title;
+			$pub_year = $list_p->p_year;
+			$pub_id = $list_p->pid;
+			$database_information  = array("title_database"=>$pub_title, "year_database"=>$pub_year);
+			$form['database_information'] = array('#value' => $database_information);   
+//			drupal_set_message('titulo scholar: '.print_r($form['database_information'],true).'el i'); 
+                        	if(($pub_title==$form['scholar_information'][$i]['#value']['title'] && $pub_year==$form['scholar_information'][$i]['#value']['year'])){
+                         	drupal_set_message('PUBLICAIÓN IGUAL añoIGUAL AÑO BASE DE DATOS:'.$pub_title. 'VS año gs:'.$scholar_doc_year. 'id:'.$pub_id);
+                        $form['doc'][$i] = array('#markup' => '<br><strong>'.$scholar_doc_title.'</strong>, '.$scholar_doc_authors.', <strong>'.		$scholar_doc_year.'</strong></br>');
+
+				}
+				else{
+				drupal_set_message('PUBLICAIÓN diferentes:'.$scholar_doc_title.$scholar_doc_year);
+                        	$form['doc'][$i] = array('#markup' => '<br><strong>'.$scholar_doc_title.'</strong>, '.$scholar_doc_authors.', <strong>'.		$scholar_doc_year.'</strong></br>');
+				}
+			}
+
+
+			}
+			else{
+			drupal_set_message('no hay publicaiones en la base de datos');
+			$mezcla =array_combine($form['title'][$i], $form['year'][$i]);
+			
+	    		/*foreach ($mezcla  as $title => $year) {
+			db_insert('reposi_publication')->fields(array(
+					'p_type'       => 'Undefined',
+					'p_title'      => $title,
+					'p_year'       => $year,
+					'p_check'      => 0,
+					'p_source'     => t('Google Scholar'),
+			))->execute();
+			//$scholar_title = explode('||||',$scholar_information);
+                        echo $i . '  '. ' TITULO:'.$title. ' AÑO:'.$year. '   ';
+			drupal_set_message(' TITULO:'.$title. ' AÑO:'.$year);
+			}*/
+	    		foreach ($form['title'][$i]  as $scholar_information) {
+		/*	db_insert('reposi_publication')->fields(array(
+					'p_type'       => 'Undefined',
+					'p_title'      => $scholar_information,
+					'p_year'       => 5555,
+					'p_check'      => 0,
+					'p_source'     => t('Google Scholar'),
+			))->execute();*/
+			//$scholar_title = explode('||||',$scholar_information);
+                        
+
+			}
+			}
+         //               drupal_set_message('DATABASE: '.print_r($database_information,true). ' scholar:'.print_r($google_scholar_information,true));
+	//		array_combine($google_scholar_information, $database_information);
+
+		/*	foreach (array_combine($scholar_information, $find_pub) as $scholar_information => $list_p){
+			}
+
+		/*	for($i=0; $i<count($title_doc_scholar); $i++){
+			$google_scholar_information = array("title"=>$title_doc_scholar[$i],"authors"=>$authors_doc_scholar[$i],"year"=>$year_doc_scholar[$i]);
+			drupal_set_message('$scholar_doc_title: '.print_r($google_scholar_information,true));
+			}*/
+///////////////////////// C I E R R A    E L 	F O R //////////////////////////////////////////
+			}
+///////////////////////////////////////////////////////////////////////////////////////////////
+			$search_pub = db_select('reposi_publication', 'p');
+			$search_pub->fields('p');
+			$find_pub = $search_pub->execute();
+			$cuenta=count($find_pub);
+				$count_pub=0;
+			foreach ($find_pub as $pub) {
+				$count_pub++;
+			}
+			drupal_set_message('cuentaaAA:'.$count_pub);
+			if($count_pub>0)
+			{
+			}
+			else{
+	    		foreach ($form['scholar_information'] as $scholar_information) {
+				/*db_insert('reposi_publication')->fields(array(
+					'p_type'       => 'Undefined',
+					'p_title'      => $scholar_information['#value']['title'],
+					'p_year'       => $scholar_information['#value']['year'],
+					'p_check'      => 0,
+					'p_source'     => t('Google Scholar'),
+				))->execute();*/
+				echo print_r($scholar_information['#value'],true);
+	    		 	drupal_set_message('year '.print_r($scholar_information['#value'],true).'</br>');
+	    		}
+			}
+}}
+////////////////////
+	    	/*	$get_info_docs = file_get_contents($search_doc);
 	    		$num_docs = explode('totalResults":"', $get_info_docs);
 	    		$number_docs = explode('","opensearch:startIndex', $num_docs[1]);
 	    		$search_eid = explode('"eid":"', $get_info_docs);
@@ -164,7 +324,6 @@ public static function docs_scopus(){
 						    ))->execute();
 						    db_insert('reposi_publication')->fields(array(
 						        'p_type'       => 'Article',
-							'p_source'     => 'Scopus',
 						        'p_title'      => $title_doc_scopus[$i][0],
 						        'p_year'       => $fields_date[0],
 						        'p_check'      => 0,
@@ -294,7 +453,6 @@ public static function docs_scopus(){
 						    ))->execute();
 						    db_insert('reposi_publication')->fields(array(
 						        'p_type'       => 'Book',
-							'p_source'     => 'Scopus',
 						        'p_title'      => $title_doc_scopus[$i][0],
 						        'p_year'       => $fields_date_book[0],
 						        'p_check'      => 0,
@@ -407,7 +565,7 @@ public static function docs_scopus(){
           					  ->condition('ab.ab_subtitle_chapter', $title_doc_scopus[$i][0], '=');
 					    $find_chap = $search_chap->execute();
 					    $chap_id = $find_chap->fetchField();
-              $find_chap -> allowRowCount = TRUE;
+              				    $find_chap -> allowRowCount = TRUE;
 					    $find_something = $find_chap->rowCount();
 					    if ($find_something == '0') {
 					    	db_insert('reposi_article_book')->fields(array(
@@ -430,7 +588,6 @@ public static function docs_scopus(){
 						    ))->execute();
 						    db_insert('reposi_publication')->fields(array(
 						        'p_type'       => 'Book Chapter',
-							'p_source'     => 'Scopus',
 						        'p_title'      => $title_doc_scopus[$i][0],
 						        'p_year'       => $fields_date_chap[0],
 						        'p_check'      => 0,
@@ -598,25 +755,17 @@ public static function docs_scopus(){
 	      '#type' => 'details',
 	      '#open' => TRUE,
 	    );
-	    $form['doc']['body'] = array('#markup' => $info_show);
+	    $form['doc']['body'] = array('#markup' => $info_show);*/
 		return $form;
-	}
+	
 }
 
-function reposi_author_scopus(){
-	global $base_url;
-  $config = ConfigFormBase::config('system.maintenance');
-	$apikey_scopus = $config->get('reposi_apiscopus_key');
-	$apikey_query_start = $config->get('query_start');
-	$apikey_query_final = $config->get('query_final');
-	if (empty($apikey_scopus)) {
-		drupal_set_message('You must configure the module Repository -
-			Scopus Search API to use all its functions.', 'warning');
-		$message = '<p>' . '<b>' . '<big>' . 'First enter the APIKey from the
-		configuration tab.' . '</big>'.'</b>'.'</p>';
-		$form['message'] = array('#markup' => $message);
-	    return $form;
-	} else {
+function reposi_author_scholar(){
+
+        $config = ConfigFormBase::config('system.maintenance');
+	$apikey_query_start = $config->get('query_scholar_start');
+	$apikey_query_final = $config->get('query_scholar_final');
+        
 	/*****************************************
 	Info dinámica de un autor por nombre
 	*****************************************/
@@ -630,14 +779,17 @@ function reposi_author_scopus(){
 		    $search_author_full_name->fields('p')
 						            ->condition('p.uid', $author_act->s_uid, '=')
 						            ->orderBy('u_first_lastname', 'ASC');
-        $pager=$search_author_full_name->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(10);
-		    $author_full_name[] = $pager->execute()->fetchAssoc();
+        	$pager=$search_author_full_name->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(10);
+	    	$author_full_name[] = $pager->execute()->fetchAssoc();
 	    }
-      $form['body'] = array();
-	    $dates_authors = array();
-	    foreach ($author_full_name as $authors_name) {
-	    	if (empty($authors_name['u_id_scopus'])) {
-		    	$all_authors_scopus_info = '';
+        $form['body'] = array();
+        $dates_authors = array();
+	   foreach ($author_full_name as $authors_name) {
+		$authorscount=count($authors_name);
+		if ($authorscount<1) {drupal_set_message('AUTHOR NAME: '.$authorscount);
+		}
+	    	if ($authors_name['u_id_scholar']==NULL && $authorscount>1) {
+		    	$all_authors_scholar_info = '';
 			    $authors_eid_catch = array();
 			    $author_lastname = array();
 			    $author_affilname = array();
@@ -646,26 +798,83 @@ function reposi_author_scopus(){
 			    $aut_affil_name = array();
 			    $author_aff_place = array();
 			    $aut_affil_country = array();
-		    	$search_lastname_1 = Reposi_info_publication::reposi_string($authors_name['u_first_lastname']);
+		    		$search_lastname_1 = Reposi_info_publication::reposi_string($authors_name['u_first_lastname']);
 				$search_lastname_2 = Reposi_info_publication::reposi_string($authors_name['u_second_lastname']);
 				$search_name_1 = Reposi_info_publication::reposi_string($authors_name['u_first_name']);
 				$search_name_2 = Reposi_info_publication::reposi_string($authors_name['u_second_name']);
 				if ((empty($search_name_2)) && (!empty($search_name_1))) {
-					$search_author_scopus = 'https://api.elsevier.com/content/search/author?query=authlastname(' .
-						$search_lastname_1 . '+' . $search_lastname_2 . ')+AND+authfirst(' . $search_name_1 .
-						')&start=' . $apikey_query_start . '&count=' . $apikey_query_final . '&apikey=' .
-						$apikey_scopus;
-				} elseif ((!empty($search_name_2)) && (!empty($search_name_1))) {
-					$search_author_scopus = 'https://api.elsevier.com/content/search/author?query=authlastname(' .
-						$search_lastname_1 . '+' . $search_lastname_2 . ')+AND+authfirst(' . $search_name_1 .
-						'+' . $search_name_2 . ')&start=' . $apikey_query_start . '&count=' . $apikey_query_final .
-						'&apikey=' . $apikey_scopus;
-				}
-				if (!empty($search_author_scopus)) {
-					$get_info_authors = file_get_contents($search_author_scopus);
+					$author_name = $search_name_1. ' '. $search_lastname_1 . ' ' . $search_lastname_2;
+                                	$search_author_scholar='http://localhost/apiGS/getuser.php?fname='. $search_name_1 .
+					'&sname=' . '' . '&flast=' . $search_lastname_1 . '&slast=' . $search_lastname_2;
+				} 
+				elseif ((!empty($search_name_2)) && (!empty($search_name_1))) {
+					$author_name = $search_name_1 . ' ' . $search_name_2. ' '. $search_lastname_1 . ' ' . $search_lastname_2;
+                                	$search_author_scholar='http://localhost/apiGS/getuser.php?fname='. $search_name_1 .
+					'&sname=' . $search_name_2  . '&flast=' . $search_lastname_1 . '&slast=' . $search_lastname_2;
+				}	
+			//	$form['bodyborrar'][$search_name_1] = array('#markup' => ' '.$search_name_1);
+			//	$search_author_scholar='http://localhost/googlescholar-api/googlescholar.php?fname=eduardo&sname&flast=rojas&slast=';
+				if (!empty($search_author_scholar)) {
+					/*$get_info_authors = file_get_contents($search_author_scopus);
 					$num_results = explode('totalResults":"', $get_info_authors);
 					$number_results = explode('","opensearch:startIndex', $num_results[1]);
-					if ($number_results[0] != 0) {
+ 					///////*/
+					$client = \Drupal::httpClient();
+ 					try {
+        					$jsonData = json_encode($_POST);    
+						$headers = ['Content-Type' => 'application/json'];
+    						$response = $client->request('POST', $search_author_scholar, ['timeout' => 600, 'headers'=>$headers,'body' => 							$jsonData]);
+					      //  $response = $client->request('GET', '/delay/5', ['timeout' => 3.14]);
+    						$data = $response->getBody();
+						//$decoded = Json::decode($data);
+    						$scholar_user = explode('{', $data);
+    						$scholar_data = explode('"Name": "', $data);
+						$data_number = count($scholar_data);
+						$scholar_info = explode('",',$data);
+						$header = array(t('Google Scholar ID'), t('Name'), t('Affiliation'));
+					//	drupal_set_message('count:'.$data_number. ' SCHOLAR DATA'.print_r($scholar_data,true));
+    						$form['scholar'][$search_lastname_1] = array(
+       							'#type' => 'details',
+       							'#open' => TRUE,
+       							'#title' => $author_name,
+							'#description' => 'Associate with a Google Scholar User',
+    						);/*
+$ch = curl_init($search_author_scholar);	
+    						    if (curl_errno($ch)) {
+      $this->error = 'cURL connection error ('.curl_errno($ch).'): '.htmlspecialchars(curl_error($ch)).' <a href="http://www.google.com/search?q='.urlencode("curl error ".curl_error($ch)).'">Search</a>';
+      $this->connected = false;
+    } else {
+      $this->connected = true;
+    }*/						$form['scholar'][$search_lastname_1]['table']  = array(
+       							'#type' => 'table',
+       							'#title' => 'Scholar Author Table',
+       							'#header' => $header,
+       							'#empty' => t('No lines found'),
+    						);
+						for($i=1; $i<$data_number; $i++)
+                                                {
+                                                 $scholar_name = explode('",', $scholar_data[$i]);
+						// drupal_set_message(print_r($scholar_name,true));
+						 $scholar_info = explode('"institution": "', $scholar_name[1]);
+						 $scholar_user = explode('"user": "', $scholar_name[2]);
+						 $scholar_id_user = substr($scholar_user[1],-27,12);
+						 $scholar_info = $scholar_info[1];
+						 $scholar_name = $scholar_name[0];
+  						 $rows = array($scholar_id_user,$scholar_name,$scholar_info);
+					//	 drupal_set_message('NOMBRE: '.$scholar_name.' INFORMACIÓN: '.$scholar_info.' USER SCHOLAR: '.$scholar_id_user);
+
+						 $link_scholar = \Drupal::l($scholar_id_user, Url::fromRoute('reposi.reposi_apischolar.scholar_assoc', ['node'=>$authors_name['uid'], 'nod'=>$scholar_id_user]));
+    						 $form['scholar'][$search_lastname_1]['table'][$i]['id_author_scholar'] = array('#markup' => $link_scholar);
+    						 $form['scholar'][$search_lastname_1]['table'][$i]['author_name_scholar'] = array('#markup' => $scholar_name);
+    						 $form['scholar'][$search_lastname_1]['table'][$i]['author_information_scholar'] = array('#markup'=>$scholar_info);}
+
+  						}
+ 				        	catch (RequestException $e) {
+   							watchdog_exception('reposi', $e->getMessage());
+							return array();
+  						}	
+				}
+					/*if ($number_results[0] != 0) {
 						$find_scopus_authors = explode('"AUTHOR_ID:', $get_info_authors);
 						$flag_search_authors = -1;
 						foreach ($find_scopus_authors as $authors) {
@@ -818,21 +1027,21 @@ function reposi_author_scopus(){
 						}
 					}
 					$dates_authors[] = $all_authors_scopus_info;
-				}
+				}*/
 			}
 	    }
-		$number_authors = count($dates_authors);
+		//$number_authors = count($dates_authors);
 
 	/*****************************************
 	*****************************************/
-    $form['pager']=['#type' => 'pager'];
+    //$form['pager']=['#type' => 'pager'];
 
 
 
 
 
 
-
+/*
 
 	    $form['aut_sdin_id'] = array(
 		    '#title' => t('User(s) without Scopus ID Author'),
@@ -841,45 +1050,13 @@ function reposi_author_scopus(){
 	    for ($i=0; $i < $number_authors; $i++) {
 	    	$form['aut_sdin_id']['body_' . $i] = array('#markup' => $dates_authors[$i]);
 	    }
-
+*/
 		return $form;
-	}
+	
 }
-public static function reposi_string($string) {
-    $string = trim($string);
-    $string = str_replace(
-      array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
-      array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
-      $string
-    );
-    $string = str_replace(
-      array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
-      array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
-      $string
-    );
-    $string = str_replace(
-      array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
-      array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
-      $string
-    );
-    $string = str_replace(
-      array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
-      array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
-      $string
-    );
-    $string = str_replace(
-      array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
-      array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
-      $string
-    );
-    $string = str_replace(
-      array('ñ', 'Ñ', 'ç', 'Ç'),
-      array('n', 'N', 'c', 'C',),
-      $string
-    );
-    return $string;
-  }
+
 ///////
+/*
   public static function testdocs_scopus(){
     $search_publi = db_select('reposi_user','p');
     $arg=3;
@@ -897,6 +1074,6 @@ public static function reposi_string($string) {
   		$form['message'] = array('#markup' => $message);
       return $form;
 }
-
+*/
 //End class
 }

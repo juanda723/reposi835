@@ -1,0 +1,11 @@
+name: Repository - Google Scholar Search API
+description: Google Scholar Search
+type: module
+core: 8.x
+package: Repository
+
+dependencies:
+  - reposi
+version: '8.x-1.5'
+project: 'repository'
+datestamp: 1462893680

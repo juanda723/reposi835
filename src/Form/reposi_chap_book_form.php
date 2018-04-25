@@ -326,6 +326,7 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
   ))->execute();
   db_insert('reposi_publication')->fields(array(
       'p_type'  => 'Book Chapter',
+      'p_source'=> 'Manual',
       'p_title' => $chap_chap,
       'p_year'  => $new_chap_year,
       'p_check' => 1,

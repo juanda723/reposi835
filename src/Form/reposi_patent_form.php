@@ -281,6 +281,7 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
     ))->execute();
     db_insert('reposi_publication')->fields(array(
         'p_type'  => 'Patent',
+	'p_source'=> 'Manual',
         'p_title' => $pat_name,
         'p_year'  => $patent_year,
         'p_check' => 1,

@@ -370,6 +370,7 @@ class Reposi_thesis extends FormBase {
   ))->execute();
   db_insert('reposi_publication')->fields(array(
       'p_type'  => 'Thesis',
+      'p_source'=> 'Manual',
       'p_title' => $the_title,
       'p_year'  => $thesis_year,
       'p_check' => 1,

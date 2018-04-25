@@ -1,0 +1,6 @@
+services:
+  reposi.client:
+    class: GuzzleHttp\Client
+    factory: reposi.client.factory:get
+  reposi.client.factory:
+    class: Drupal\reposi\ClientFactory

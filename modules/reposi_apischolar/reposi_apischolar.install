@@ -1,0 +1,13 @@
+<?php
+
+function reposi_apischolar_install() {}
+
+  function reposi_apischolar_uninstall() {
+  	\Drupal::state()->delete('query_scholar_start');
+  	\Drupal::state()->delete('query__scholar_final');
+  	\Drupal::state()->delete('apikey_scholar');
+  	\Drupal::state()->delete('apikey_scholar_query_start');
+  	\Drupal::state()->delete('apikey_scholar_query_final');
+  	\Drupal::state()->delete('reposi_apischolar_cron');
+  }
+?>

@@ -107,6 +107,13 @@ class Reposiuser_edit_admin extends FormBase {
       '#default_value' => $this_user['u_id_scopus'],
       '#required' => FALSE,
     );
+    $form['adm_user']['adm_user_idscholar'] = array(
+      '#title' => t('Google Scholar ID Author'),
+      '#type' => 'textfield',
+      '#maxlength' => 100,
+      '#default_value' => $this_user['u_id_scholar'],
+      '#required' => FALSE,
+    );
 
   $result = db_query('SELECT academic_type FROM {reposi_academic} LIMIT 3');
   foreach ($result as $res) {
@@ -141,6 +148,7 @@ class Reposiuser_edit_admin extends FormBase {
   $adm_email3 = $form_state->getValue('adm_user_email3');
   $adm_homo = $form_state->getValue('adm_user_orcid');
   $adm_scopus = $form_state->getValue('adm_user_idscopus');
+  $adm_scholar = $form_state->getValue('adm_user_idscholar');
   $adm_academic = $form_state->getValue('adm_user_acarol');
   $adm_aca_type = $form_state->getValue(['adm_acad_options', $adm_academic]);
   $uid = $form_state->getValue('uid');
@@ -196,6 +204,7 @@ class Reposiuser_edit_admin extends FormBase {
   $adm_email3 = $form_state->getValue('adm_user_email3');
   $adm_homo = $form_state->getValue('adm_user_orcid');
   $adm_scopus = $form_state->getValue('adm_user_idscopus');
+  $adm_scholar = $form_state->getValue('adm_user_idscholar');
   $adm_academic = $form_state->getValue('adm_user_acarol');
   $adm_aca_type = $form_state->getValue(['adm_acad_options', $adm_academic]);
   $adm_uid = $form_state->getValue('uid');
@@ -222,6 +231,7 @@ class Reposiuser_edit_admin extends FormBase {
       'u_optional_email_2'=> $new_email3,
       'u_id_homonymous'   => $adm_homo,
       'u_id_scopus'       => $adm_scopus,
+      'u_id_scholar'      => $adm_scholar,
       'u_adm_aca_type'    => $adm_aca_type,
        ];
 

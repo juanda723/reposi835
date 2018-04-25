@@ -1,0 +1,31 @@
+reposi.reposi_apischolar.docs_scholar:
+  path: 'reposi/docs_scholar'
+  defaults:
+    _controller: 'Drupal\reposi_apischolar\Controller\reposidoc_scholar::docs_scholar'
+    _title: 'Import metadata from documents'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apischolar.scholar_assoc:
+  path: '/reposi/author_scholar/associate/{node}/{nod}'
+  defaults:
+    _form: '\Drupal\reposi_apischolar\Form\reposi_author_scholar_assoc'
+    _title: 'Associate author'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apischolar.author_scholar:
+  path: 'reposi/author_scholar'
+  defaults:
+    _controller: 'Drupal\reposi_apischolar\Controller\reposidoc_scholar::reposi_author_scholar'
+    _title: 'Find ID author on Google Scholar'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apischolar.scholar_admin:
+  path: 'admin/config/content/apischolar'
+  defaults:
+    _form: '\Drupal\reposi_apischolar\Form\reposi_apischolar_admin'
+    _title: 'Configuration to API Google Scholar'
+  requirements:
+    _permission: 'administrator'

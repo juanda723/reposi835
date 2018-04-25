@@ -7,6 +7,8 @@ namespace Drupal\reposi\Controller;
 
 use Drupal\Core\Database;
 use Drupal\Core\Url;
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Html;
 
 
 class ReposiController {
@@ -529,7 +531,52 @@ function reposi_list_keyword() {
   return $form;
 }
 //-----------------------------------------------------------------------------------------------------------------
+/*protected $reposi_client;
+  public function __construct(
+      Client $reposi_client
+    ) {
+    parent::__construct();
+    $this->reposi_client = $reposi_client;
+  }
 
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('reposi.client')
+    );
+  }
+
+*/
+function query_google_scholar() {
+
+//$this->reposi_client;
+  $client = \Drupal::httpClient();
+  $request = $client->get('https://scholar.google.com');
+ // $response = $request->getBody();
+  //drupal_set_message(t('The publication was updated.'.print_r($response,true)));
+///////
+ try {
+    $response = $client->get('http://cse.bth.se/~fer/googlescholar.php?user=Z9vU8awAAAAJ');
+    $data = $response->getBody();
+    $hola=Json::decode($data);
+    $gg=Html::decodeEntities($data);
+    $num_docs = explode('[', $gg);
+    $llave = explode('},', $data);
+    echo print_r($num_docs,true);
+    $decoded = Json::decode($data);
+    $form['body'] = array('#markup' => $data);
+    $request = $client->post('http://cse.bth.se/~fer/googlescholar.php?user=Z9vU8awAAAAJ', [
+    'json' => [
+      'publications'=> 'title'
+    ]
+  ]);
+  $response = Json::decode($request->getBody());
+    drupal_set_message(t('Scholar está mostrando lo siguiente: ').$llave);
+  }
+  catch (RequestException $e) {
+    watchdog_exception('reposi', $e->getMessage());
+  }
+return $form;
+}
 
 //--------------------------------------------------------------------------------------------------------------
 

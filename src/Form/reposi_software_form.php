@@ -216,6 +216,7 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
   ))->execute();
   db_insert('reposi_publication')->fields(array(
       'p_type'  => 'Software',
+      'p_source'=> 'Manual',
       'p_title' => $sw_name,
       'p_year'  => $softw_year,
       'p_check' => 1,

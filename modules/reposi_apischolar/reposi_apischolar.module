@@ -1,0 +1,55 @@
+<?php
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+//use Drupal\reposi_apischolar\Controller\reposidoc_scholar;
+
+function _reposi_apischolar_user_role_administrator() {
+  global $user;
+  $roles = array('administrator');
+  foreach ($roles as $role) {
+    if (in_array($role, $user->roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+function reposi_apischolar_cron(){
+
+$config = \Drupal::config('system.maintenance');
+$reposi_apischolar_cron = $config->get('reposi_apischolar_cron');
+if (isset($reposi_apischolar_cron)) {
+		if ($reposi_apischolar_cron == 1){
+			$less_month = 1*3600*24*30;
+		} elseif ($reposi_apischolar_cron == 2){
+			$less_month = 3*3600*24*30;
+		} elseif ($reposi_apischolar_cron == 3){
+			$less_month = 6*3600*24*30;
+		}
+	} else {
+		$less_month = 12*3600*24*30;
+	}
+
+  $estae=\Drupal::state()->get('date_now_scholar');
+
+  if (!isset($estae) ){
+    $date_now=\Drupal::time()->getRequestTime();
+    \Drupal::state()->set('date_now_scholar',$date_now);
+    $date_event=$date_now+$less_month;
+    \Drupal::state()->set('date_event_scholar',$date_event);
+  }
+
+  $datete=\Drupal::state()->get('date_event_scholar');
+  $date=\Drupal::time()->getRequestTime();
+  $stateless=\Drupal::state()->get('date_event_scholar_1');
+if ( ($datete<=$date) || ($stateless!=$reposi_apischolar_cron) ){
+  $date_now=\Drupal::time()->getRequestTime();
+  //reposidoc_scholar::docs_scholar(0, \Drupal::time()->getRequestTime());
+  \Drupal::state()->set('date_now_scholar',$date_now);
+  $date_event=$date_now+$less_month;
+  \Drupal::state()->set('date_event_scholar',$date_event);
+}
+\Drupal::state()->set('date_event_scholar_1',$reposi_apischolar_cron);
+$time_for_event=floor(($datete-$date)/(3600*24));
+drupal_set_message("Next event API Google Scholar in ".$time_for_event." days");
+}

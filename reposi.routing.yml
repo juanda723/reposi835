@@ -22,6 +22,14 @@ reposi.PubliListReposiSearch:
   requirements:
     _permission: 'access content'
 
+reposi.scholar:
+  path: 'reposi/scholar'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::query_google_scholar'
+    _title: 'Scholar Query'
+  requirements:
+    _permission: 'access content'
+
 reposi.author:
   path: 'reposi/author'
   defaults:

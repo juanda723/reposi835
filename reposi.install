@@ -96,6 +96,12 @@ function reposi_schema() {
           'not null' => FALSE,
           'description' => '',
         ),
+        'u_id_scholar' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => FALSE,
+          'description' => '',
+        ),
       ),
     'primary key' => array('uid'),);
 
@@ -363,6 +369,12 @@ function reposi_schema() {
           'not null' => FALSE,
           'description' => '',
         ),
+        'a_id_scholar' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => FALSE,
+          'description' => '',
+        ),
         'a_first_name' => array(
           'type' => 'varchar',
           'length' => '255',
@@ -612,6 +624,12 @@ function reposi_schema() {
           'not null' => TRUE,
           'description' => '',
         ),
+        'p_source' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => FALSE,
+          'description' => '',
+        ),
         'p_year' => array(
           'type' => 'int',
           'not null' => TRUE,
@@ -624,6 +642,12 @@ function reposi_schema() {
           'description' => '1 validate, 0 unvalidated',
         ),
         'p_eid_scopus' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
+        'p_pid_scholar' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => FALSE,

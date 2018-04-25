@@ -11,7 +11,7 @@ reposi.reposi_apiscopus.admin:
   parent: system.admin_config_system
 
 reposi.reposi_apiscopus.scopus_docs:
-  title: 'Import metadata from documents'
+  title: 'Import metadata from Scopus'
   route_name: reposi.reposi_apiscopus.docs_scopus
   menu_name: tools
   parent: reposi

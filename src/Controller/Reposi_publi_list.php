@@ -257,7 +257,7 @@ function reposi_list_publication_free(){
                           $each_aut['a_second_lastname'] . ' ' . $f_name[0] . '. ' . $s_name[0] . '.',
                           Url::fromRoute('reposi.author_aid',['node'=>$book_aut->ap_author_id])) . ', ';
           } else {
-            $list_aut_book = $list_aut_book . l($each_aut['a_first_lastname'] . ' ' .
+            $list_aut_book = $list_aut_book . \Drupal::l($each_aut['a_first_lastname'] . ' ' .
                           $each_aut['a_second_lastname'] . ' ' .
                           $f_name[0] . '.', Url::fromRoute('reposi.author_aid',['node'=>$book_aut->ap_author_id])) . ', ';
           }
@@ -569,8 +569,6 @@ function reposi_list_publication_free(){
 
 
 public function reposi_list_publication(){
-  global $base_url;
-
   $search_publi = db_select('reposi_publication', 'p');
   $search_publi->fields('p')
              ->orderBy('p.p_check', 'DESC')

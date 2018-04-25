@@ -1,0 +1,19 @@
+reposi.reposi_apischolar.author_sccholarlink:
+  title: 'Find ID author on Google Scholar'
+  route_name: reposi.reposi_apischolar.author_scholar
+  menu_name: tools
+  parent: reposi
+
+reposi.reposi_apischolar.admin:
+  title: 'Configuration to API Google Scholar'
+  route_name: reposi.reposi_apischolar.scholar_admin
+  description: 'Configure the firstmod module'
+  parent: system.admin_config_system
+
+reposi.reposi_apischolar.scholar_docs:
+  title: 'Import metadata from Google Scholar'
+  route_name: reposi.reposi_apischolar.docs_scholar
+  menu_name: tools
+  parent: reposi
+
+

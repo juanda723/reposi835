@@ -83,6 +83,12 @@ class Reposi_user_admin_form extends FormBase {
     '#maxlength' => 100,
     '#required' => FALSE,
   );
+  $form['adm_user']['adm_user_idscholar'] = array(
+    '#title' => t('Google Scholar User'),
+    '#type' => 'textfield',
+    '#maxlength' => 100,
+    '#required' => FALSE,
+  );
   $result = db_query('SELECT academic_type FROM {reposi_academic} LIMIT 3');
   foreach ($result as $res) {
     $academic_r[]=$res->academic_type;
@@ -117,6 +123,7 @@ class Reposi_user_admin_form extends FormBase {
   $adm_email3 = $form_state->getValue('adm_user_email3');
   $adm_homo = $form_state->getValue('adm_user_orcid');
   $adm_scopus = $form_state->getValue('adm_user_idscopus');
+  $adm_scholar = $form_state->getValue('adm_user_idscholar');
   $adm_academic = $form_state->getValue('adm_user_acarol');
   $adm_aca_type = $form_state->getValue(['adm_acad_options', $adm_academic]);
   //$adm_aca_type = $form_state['values']['adm_acad_options'][$adm_academic];------------->CAMBIO:ASÍ ERA EN DRUPAL 7
@@ -190,6 +197,7 @@ class Reposi_user_admin_form extends FormBase {
           'u_optional_email_2' => $new_email3,
           'u_id_homonymous'    => $adm_homo,
           'u_id_scopus'        => $adm_scopus,
+	  'u_id_scholar'       => $adm_scholar,
       ))->execute();
       $serch_a = db_select('reposi_author', 'a');
       $serch_a->fields('a')
@@ -201,6 +209,7 @@ class Reposi_user_admin_form extends FormBase {
       if (empty($serch_aut)) {
         db_insert('reposi_author')->fields(array(
           'a_id_scopus'        => $adm_scopus,
+	  'a_id_scholar'       => $adm_scholar,
           'a_first_name'       => $new_fname,
           'a_second_name'      => $new_sname,
           'a_first_lastname'   => $new_flastname,
