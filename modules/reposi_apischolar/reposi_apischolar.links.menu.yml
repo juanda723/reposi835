@@ -16,4 +16,8 @@ reposi.reposi_apischolar.scholar_docs:
   menu_name: tools
   parent: reposi
 
-
+reposi.reposi_apischolar.listgs:
+  title: 'List Undefined Google Scholar'
+  route_name: reposi.gspub
+  menu_name: tools
+  parent: reposi.listpub

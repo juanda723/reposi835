@@ -29,3 +29,19 @@ reposi.reposi_apischolar.scholar_admin:
     _title: 'Configuration to API Google Scholar'
   requirements:
     _permission: 'administrator'
+
+reposi.gspub:
+  path: 'reposi/listgs'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_listgs'
+    _title: 'Scholar List'
+  requirements:
+    _permission: 'administrator'
+
+reposi.define_typePublicationGS:
+  path: 'reposi/undefined/{node}'
+  defaults:
+    _form: '\Drupal\reposi_apischolar\Form\reposi_gstype'
+    _title: 'Define type Publication For use API Google Scholar'
+  requirements:
+    _permission: 'administrator'

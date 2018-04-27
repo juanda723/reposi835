@@ -654,7 +654,7 @@ public function reposi_list_publication(){
           $publications = $publications .'<p>'. $list_aut_ts. '(' . $pub_year . ') ' .'<b>'.
                           \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_sofinformation',['node'=>$tsid])) . '</b>' . '.' . '</p>';
         }
-      } else {
+      } elseif (isset($cpid)) {
         $cpid = $list_p->p_cpid;
         $search_p_a = db_select('reposi_publication_author', 'pa');
         $search_p_a->fields('pa', array('ap_author_id', 'ap_cpid'))
@@ -751,7 +751,7 @@ public function reposi_list_publication(){
           $publications_un = $publications_un .'<p>'. $list_aut_ts. '(' . $pub_year . ') ' .'<b>'.
                           \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_sofinformation',['node'=>$tsid])) . '</b>' . '.' . '</p>';
         }
-      } else {
+      } elseif (isset($cpid)){
         $cpid = $list_p->p_cpid;
         $search_p_a = db_select('reposi_publication_author', 'pa');
         $search_p_a->fields('pa', array('ap_author_id', 'ap_cpid'))

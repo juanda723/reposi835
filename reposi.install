@@ -472,13 +472,13 @@ function reposi_schema() {
           'size' => 'big',
           'unsigned' => TRUE,
           'not null' => TRUE,
-          'description' => '',
+          'description' => 'Incremental author automatic',
         ),
         'ap_author_id' => array(
           'type' => 'int',
           'size' => 'big',
           'not null' => TRUE,
-          'description' => '',
+          'description' => 'Referencia a Author Id',
         ),
         'ap_abid' => array(
           'type' => 'int',
@@ -497,6 +497,12 @@ function reposi_schema() {
           'size' => 'big',
           'not null' => FALSE,
           'description' => 'Conference or Patent ID',
+        ),
+        'ap_unde' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Undefined type publication ID',
         ),
       ),
     'primary key' => array('apid'),);
@@ -671,6 +677,18 @@ function reposi_schema() {
           'not null' => FALSE,
           'description' => '',
         ),
+        'p_unde' => array(
+          'type' => 'int',
+          'size' => 'big',
+          'not null' => FALSE,
+          'description' => 'Undefined type publication ID',
+        ),
+        'p_uid' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => '',
+        ),
       ),
     'primary key' => array('pid'),);
 
@@ -686,7 +704,7 @@ function reposi_academic_rol() {
   $arol[] = array(100, t('Teacher'), NULL);
   $arol[] = array(101, t('Student'), NULL);
   $arol[] = array(102, t('Student and Teacher'), NULL);
-  $db = \Drupal::database(); 
+  $db = \Drupal::database();
   foreach ($arol as $record) {
     $db->insert('reposi_academic')
        ->fields(array(
