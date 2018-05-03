@@ -45,3 +45,11 @@ reposi.define_typePublicationGS:
     _title: 'Define type Publication For use API Google Scholar'
   requirements:
     _permission: 'administrator'
+
+reposi.testfunt:
+  path: 'reposi/testgs'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposidoc_scholar::pubscolar_pat'
+    _title: 'Scholar Test'
+  requirements:
+    _permission: 'administrator'

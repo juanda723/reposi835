@@ -191,12 +191,14 @@ function reposi_schema() {
           'description' => '',
         ),
         'abd_start_page' => array(
-          'type' => 'int',
+          'type' => 'varchar',
+          'length' => '255',
           'not null' => FALSE,
           'description' => '',
         ),
         'abd_final_page' => array(
-          'type' => 'int',
+          'type' => 'varchar',
+          'length' => '255',
           'not null' => FALSE,
           'description' => '',
         ),
@@ -331,12 +333,14 @@ function reposi_schema() {
           'description' => 'Publication’s title',
         ),
         'cp_start_page' => array(
-          'type' => 'int',
+          'type' => 'varchar',
+          'length' => '255',
           'not null' => FALSE,
           'description' => '',
         ),
         'cp_final_page' => array(
-          'type' => 'int',
+          'type' => 'varchar',
+          'length' => '255',
           'not null' => FALSE,
           'description' => '',
         ),
@@ -684,10 +688,10 @@ function reposi_schema() {
           'description' => 'Undefined type publication ID',
         ),
         'p_uid' => array(
-          'type' => 'varchar',
-          'length' => '255',
+          'type' => 'int',
+          'size' => 'big',
           'not null' => FALSE,
-          'description' => '',
+          'description' => 'Asociation to Reposi User',
         ),
       ),
     'primary key' => array('pid'),);
