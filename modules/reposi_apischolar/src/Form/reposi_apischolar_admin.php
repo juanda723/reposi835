@@ -38,22 +38,12 @@ public function buildForm(array $form, FormStateInterface $form_state) {
   	    '#type' => 'fieldset',
   	    '#description' => t('This is the number of titles that query by author.'),
       );
-      $form['reposi_apischolar_size']['query_scholar_start'] = array(
-  	    '#title' => t('Start'),
-  	    '#type' => 'textfield',
-  	    '#default_value' => $config->get('query_scholar_start', 0),
-  	    '#size' => 5,
-  	    '#maxlength' => 3,
-  	    '#required' => TRUE,
-  	);
-  	$form['reposi_apischolar_size']['query_scholar_final'] = array(
-  	    '#title' => t('Final'),
-  	    '#type' => 'textfield',
-  	    '#default_value' => $config->get('query_scholar_final', 200),
-  	    '#size' => 5,
-  	    '#maxlength' => 3,
-  	    '#description' => t("Max value 200"),
-  	    '#required' => TRUE,
+  	$form['reposi_apischolar_size']['query_scholar_size'] = array(
+	    '#title' => t('Automatic execution'),
+      	    '#type' => 'select',
+      	    '#options' => array(10, 20, 100, 200, 300, 400 , 500),
+      	    '#default_value' => $config->get('query_scholar_size', 0),
+      	    '#required' => TRUE,
   	);
 
 
@@ -97,8 +87,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
    */
 public function submitForm(array &$form, FormStateInterface $form_state) {
       $this->config('system.maintenance')
-      ->set('query_scholar_start', $form_state->getValue('query_scholar_start'))
-      ->set('query_scholar_final', $form_state->getValue('query_scholar_final'))
+      ->set('query_scholar_size', $form_state->getValue('query_scholar_size'))
       ->set('reposi_apischolar_cron', $form_state->getValue('reposi_apischolar_cron'))
       ->save();
     parent::submitForm($form, $form_state);

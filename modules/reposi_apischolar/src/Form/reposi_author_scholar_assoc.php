@@ -62,6 +62,26 @@ public function buildForm(array $form, FormStateInterface $form_state) {
         '#type' => 'submit',
         '#value' => t('Accept'),
       );
+      $fn = $info_user['u_first_name'];
+      $sn = $info_user['u_second_name'];
+      $fln = $info_user['u_first_lastname'];
+      $sln = $info_user['u_second_lastname'];
+
+      $serch_a = db_select('reposi_author', 'a');
+      $serch_a->fields('a')
+              ->condition('a.a_first_name', $info_user['u_first_name'], '=')
+	      ->condition('a.a_second_name', $info_user['u_second_name'], '=')
+	      ->condition('a.a_first_lastname', $info_user['u_first_lastname'], '=')
+	      ->condition('a.a_second_lastname', $info_user['u_second_lastname'], '=');
+      $serch_author = $serch_a->execute()->fetchField();
+      $info_author = $serch_a->execute()->fetchAssoc();
+      $id_author = $info_author['aid'];
+
+    	$form['author_id'] = array(
+    		'#type' => 'value',
+    		'#value' => $id_author,
+    	);
+
       $form['cancel'] = array(
         '#type' => 'submit',
         '#value' => t('Cancel'),
@@ -79,21 +99,25 @@ public function buildForm(array $form, FormStateInterface $form_state) {
       }
   public function validateForm(array &$form, FormStateInterface $form_state)
   {
-
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $author_id=$form_state->getValue('author_id');
     $arg=\Drupal::routeMatch()->getParameter('node');
     db_update('reposi_user')->fields(array(
    	      'u_id_scholar' => \Drupal::routeMatch()->getParameter('nod'),
    	    ))->condition('uid', $arg)
    	    ->execute();
    		drupal_set_message('The user was update');
+    db_update('reposi_author')->fields(array(
+   	      'a_id_scholar' => \Drupal::routeMatch()->getParameter('nod'),
+   	    ))->condition('aid', $author_id)
+   	    ->execute();
+   		drupal_set_message('The user was update');
         $form_state->setRedirect('reposi.admuser_info', ['node' => $arg]);
-       	//$form_state['redirect'] = $base_url . '/reposi/adm_user/' . $form_state['build_info']['args'][0];
   }
 
 }

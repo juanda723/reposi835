@@ -19,26 +19,7 @@ namespace Drupal\reposi_apischolar\Controller;
 public static function docs_scholar(){
 
 	$config = \Drupal::config('system.maintenance');
-	$query_size = $config->get('query_scholar_size');
-	if (isset($query_size)) {
-		if ($query_size == 0){
-			$query_size_scholar = '010';
-		} elseif ($query_size == 1){
-			$query_size_scholar = '020';
-		} elseif ($query_size == 2){
-			$query_size_scholar = '100';
-		} elseif ($query_size == 3){
-			$query_size_scholar = '200';
-		} elseif ($query_size == 4){
-			$query_size_scholar = '300';
-		} elseif ($query_size == 5){
-			$query_size_scholar = '400';
-		} elseif ($query_size == 6){
-			$query_size_scholar = '500';
-		}
-	} else {
-		$query_size_scholar = '100';
-	}
+	$query_size_scholar = $config->get('query_scholar_size');
 	$search_author_state = db_select('reposi_state', 's');
 	$search_author_state->fields('s', array('s_uid'))
 		            ->condition('s.s_type', 'Active', '=');
@@ -58,17 +39,20 @@ public static function docs_scholar(){
 		$scholar_user_id[] = $id_scholar['u_id_scholar'];
 		$reposi_user_id[] = $id_scholar['uid'];
 	}
-	global $count;
+	
 	for($i=1; $i<count($scholar_user_id); $i++){
 		if(!empty($scholar_user_id[$i])) {
 			$search_doc[$i] = 'http://localhost/apiGS/getallpublication.php?user='.$scholar_user_id[$i].$query_size_scholar;
 			$data[$i]= file_get_contents($search_doc[$i]);
 			$decoded[$i] = array('scholar_user_id' => $scholar_user_id[$i], 'data'=>Json::decode($data[$i]));
+
+			drupal_set_message('****DECODE'.print_r($decoded[$i],true));
 			$publications_total[$i]=count($decoded[$i]['data']['publications']);
 		/*	$author_total_citations[$i] = $decoded[$i]['data']['total_citations'];
 			$author_citations_per_year[$i] = $decoded[$i]['data']['citations_per_year'];
 			$author_indice_h = $decoded[$i]['data']['indice h'];*/
 			for($p=0; $p<$publications_total[$i]; $p++){
+
 				$scholar_doc[$i] = $decoded[$i]['data']['publications'][$p];
 				$scholar_doc_title[$i] = $scholar_doc[$i]['title'];
 				$scholar_doc_authors[$i] = $scholar_doc[$i]['authors'];
@@ -76,118 +60,94 @@ public static function docs_scholar(){
 				$scholar_doc_venue[$i] = $scholar_doc[$i]['venue'];
 				$scholar_doc_citations[$i] = $scholar_doc[$i]['citations'];
 				$scholar_doc_id[$i] = $scholar_doc[$i]['idpub'];
-				$scholar_id[$i] = $scholar_doc_id[$i].$scholar_doc_title[$i];
+				$form['title_scholar'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_title[$i]);
+				$form['year_scholar'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_year[$i]);
+				$form['scholar_publication_id'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_id[$i]);
+				$form['reposi_user_id'][$p] = array('#type' => 'value', '#value'=>$id_scholar['uid']);
+				$form['scholar_user_id'][$p] = array('#type' => 'value', '#value'=>$scholar_user_id[$i]);
+
+			        drupal_set_message($scholar_user_id[$i].'********* data   : '.print_r($scholar_doc[$i],true));	
 
 				$search_pub = db_select('reposi_publication', 'p');
-				$search_pub->fields('p');
-				$find_pub = $search_pub->execute();
-				$pub_id = $find_pub->fetchField();
-              			$find_pub -> allowRowCount = TRUE;
-				$find_something = $find_pub->rowCount();
-				if ($find_something == '0'){
-				$publications_count = 1+$count++;
-                       // 	$form['doc'][$p] = array('#markup' => '<br><strong> ['.$i.']'.$scholar_doc_title[$i].'</strong>, '.
-			//		           $scholar_doc_authors[$i].', <strong>'.$scholar_doc_year[$i].'</strong></br>');
-
-					db_insert('reposi_undefined_publication')->fields(array(
-      						'up_title'	=> $scholar_doc_title[$i],
-      						'up_year'	=> $scholar_doc_year[$i],
-      						'up_pid_scholar'=> $scholar_doc_id[$i],
-  					))->execute();
-  					$search_id = db_select('reposi_undefined_publication', 'up');
-  					$search_id->fields('up')
-          					  ->condition('up.up_year', $scholar_doc_year[$i], '=')
-          					  ->condition('up.up_title', $scholar_doc_title[$i], '=');
-					$unde_pub_id = $search_id->execute()->fetchField();
-
-					db_insert('reposi_publication')->fields(array(
-						'p_type'       => 'Undefined',
-						'p_title'      => $scholar_doc_title[$i],
-						'p_year'       => $scholar_doc_year[$i],
-						'p_pid_scholar'=> $scholar_doc_id[$i],
-						'p_check'      => 0,
-						'p_source'     => t('Google Scholar'),
-						'p_unde'       => $unde_pub_id,
-						'p_uid'        => $reposi_user_id[$i],
-					))->execute();
-
-					$search_author = db_select('reposi_author', 'a');
-  					$search_author->fields('a')
-          					      ->condition('a.a_id_scholar', $scholar_user_id[$i], '=');
-  					$unde_pub_author_id = $search_author->execute()->fetchField();
-
-					db_insert('reposi_publication_author')->fields(array(
-						'ap_author_id' => $unde_pub_author_id,
-						'ap_unde'      => $unde_pub_id,
-					))->execute();
-					
-				}else{
-
-					$search_pub_state = db_select('reposi_publication', 'p');
-					$search_pub_state->fields('p', array('p_pid_scholar', 'p_title'));
-					$pub_state = $search_pub_state->execute()->fetchAll();
-
-					for ($a=0; $a <count($pub_state) ; $a++) {
-						$scholar_pub_id_db[$a]= $pub_state[$a]->p_pid_scholar;
-						$reposi_pub_title_db[$a]= $pub_state[$a]->p_title;
-						$db_id[$a] = $scholar_pub_id_db[$a].$reposi_pub_title_db[$a];
+				$search_pub->fields('p')
+					   ->condition('p.p_pid_scholar', $scholar_doc_id, '=');
+      				$dif_pub_info = $search_pub->execute()->fetchField();
+      				$this_dif_pub[] = $dif_pub_info;
+			//		drupal_set_message('***************LA BASE DE DATOS dentro for:'.print_r($this_dif_pub,true));
+/*
+				
+					if(!empty($this_dif_pub[$p]) && $this_dif_pub[$p]>0){
+					$a=$p;
+						echo $scholar_user_id[$i].'  ' .$i.'//////'.$scholar_doc_id[$i];
 					}
-
-  					if (!in_array($scholar_id[$i], $db_id)) {
-
-					$publications_count = 1+$count++;
-                    		//	$form['doc'][$i][$p] = array('#markup' => '<br><strong>['.$i.'] '.$scholar_doc_title[$i]
-				//	.'</strong>, '.$scholar_doc_authors[$i].', <strong>'.$scholar_doc_year[$i].'</strong></br>');
-
- 					db_insert('reposi_undefined_publication')->fields(array(
-      						'up_title'	=> $scholar_doc_title[$i],
-      						'up_year'	=> $scholar_doc_year[$i],
-      						'up_pid_scholar'=> $scholar_doc_id[$i],
-  					))->execute();
-  					$search_id = db_select('reposi_undefined_publication', 'up');
-  					$search_id->fields('up')
-          					  ->condition('up.up_year', $scholar_doc_year[$i], '=')
-          					  ->condition('up.up_title', $scholar_doc_title[$i], '=');
-  					$unde_pub_id = $search_id->execute()->fetchField();
-
-					db_insert('reposi_publication')->fields(array(
-						'p_type'       => 'Undefined',
-						'p_title'      => $scholar_doc_title[$i],
-						'p_year'       => $scholar_doc_year[$i],
-						'p_pid_scholar'=> $scholar_doc_id[$i],
-						'p_check'      => 0,
-						'p_source'     => t('Google Scholar'),
-						'p_unde'       => $unde_pub_id,
-						'p_uid'        => $reposi_user_id[$i],
-					))->execute();
-
-					$search_author = db_select('reposi_author', 'a');
-  					$search_author->fields('a')
-          					      ->condition('a.a_id_scholar', $scholar_user_id[$i], '=');
-					$unde_pub_author_id = $search_author->execute()->fetchField();
-
-					db_insert('reposi_publication_author')->fields(array(
-						'ap_author_id' => $unde_pub_author_id,
-						'ap_unde'      => $unde_pub_id,
-					))->execute();
-					}
-
+					else{
+						echo $scholar_user_id[$i].'  ' .$i.'xxxx'.$scholar_doc_id[$i];
+					}*/
 				}
-			}
 		}	
 	}
-
-  	$form['total'] = array(
-    		'#title' => t(' Google Scholar Publications found Total'),
-    		'#type' => 'details',
-    		'#open' => TRUE,
-    		'#size' => 10,
-  	);
-	if(isset($publications_count)){
-		$form['total']['scholar_publications'] = array('#markup' => 'Publications were found with the Google Scholar User:'.$publications_count);
-	}else{
-		$form['total']['scholar_publications'] = array('#markup' => 'Publications were found with the Google Scholar User: 0');
+/*	foreach ($decoded as $get_scholar_publication_data) {
+		$get_publication_data_scholar[]=$get_scholar_publication_data['data'];
+		$get_scholar_user_id[]=$get_scholar_publication_data['scholar_user_id'];
+echo '****id schol'.print_r($get_scholar_publication_data,true);
+		$prueba[]=array('scholar_user_id' => $get_scholar_publication_data['scholar_user_id'], 'data'=>$get_scholar_publication_data['data']);
 	}
+	for($p=0; $p<count($prueba); $p++){
+	drupal_set_message('****HAY INFO DE:'.$prueba[$p]['scholar_user_id']);
+	drupal_set_message('****DATA:'.print_r($prueba[$p]['data'],true));
+	/*	$scholar_doc = $get_scholar_publication_data[$p]['data'];
+		$scholar_doc_title = $scholar_doc['title'];
+		$scholar_doc_authors = $scholar_doc['authors'];
+		$scholar_doc_year = $scholar_doc['year'];			
+		$scholar_doc_venue = $scholar_doc['venue'];
+		$scholar_doc_citations = $scholar_doc['citations'];
+		$scholar_doc_id = $scholar_doc['idpub'];
+		$form['title_scholar'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_title);
+		$form['year_scholar'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_year);
+		$form['scholar_publication_id'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_id);
+		$form['reposi_user_id'][$p] = array('#type' => 'value', '#value'=>$id_scholar['uid']);
+		$form['scholar_user_id'][$p] = array('#type' => 'value', '#value'=>$scholar_user_id[$i]);
+			}*/
+
+   //     $cuenta=count($get_publication_data_scholar);
+	//drupal_set_message('****HAY INFO DE:'.$cuenta);
+		//	$publications_total=count($decoded['publications']);
+		/*	$author_total_citations = $decoded['total_citations'];
+			$author_citations_per_year = $decoded['citations_per_year'];
+			$author_indice_h = $decoded['indice h'];
+			for($p=0; $p<$publications_total; $p++){
+
+				$scholar_doc = $decoded['publications'][$p];
+				$scholar_doc_title = $scholar_doc['title'];
+				$scholar_doc_authors = $scholar_doc['authors'];
+				$scholar_doc_year = $scholar_doc['year'];			
+				$scholar_doc_venue = $scholar_doc['venue'];
+				$scholar_doc_citations = $scholar_doc['citations'];
+				$scholar_doc_id = $scholar_doc['idpub'];
+				$form['title_scholar'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_title);
+				$form['year_scholar'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_year);
+				$form['scholar_publication_id'][$p] = array('#type' => 'value', '#value'=>$scholar_doc_id);
+				$form['reposi_user_id'][$p] = array('#type' => 'value', '#value'=>$id_scholar['uid']);
+				$form['scholar_user_id'][$p] = array('#type' => 'value', '#value'=>$scholar_user_id[$i]);
+
+			}
+			foreach ($form['title_scholar'] as $scholar_title) {
+				$scholar_publication_title[] = $scholar_title['#value'];
+			}
+			foreach ($form['year_scholar'] as $year_scholar) {
+				$scholar_publication_year[] = $year_scholar['#value'];
+			}
+			foreach ($form['scholar_publication_id'] as $scholar_pub_id) {
+				$scholar_publication_id[] = $scholar_pub_id['#value'];
+			}
+			foreach ($form['reposi_user_id'] as $user_id) {
+				$reposi_user_id[] = $user_id['#value'];
+			}
+			foreach ($form['scholar_user_id'] as $scholar_user_id) {
+				$scholar_user_id[] = $scholar_user_id['#value'];
+			}*/
+
+
 
 	return $form;
 }
