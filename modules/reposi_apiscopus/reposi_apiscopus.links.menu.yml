@@ -15,3 +15,9 @@ reposi.reposi_apiscopus.scopus_docs:
   route_name: reposi.reposi_apiscopus.docs_scopus
   menu_name: tools
   parent: reposi
+
+reposi.reposi_apiscopus.scopus_list:
+  title: 'Publication list import Scopus'
+  route_name: reposi.reposi_apiscopus.list_scopus
+  menu_name: tools
+  parent: reposi.listpub

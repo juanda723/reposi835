@@ -117,12 +117,17 @@ class reposi_gstype extends FormBase {
     $form['save'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
-      '#submit' => array([$this, 'Cancel']),
+      '#submit' => array([$this, 'Save']),
     );
     $form['cancel'] = array(
       '#type' => 'submit',
       '#value' => t('Cancel'),
-      '#submit' => array([$this, 'Save']),
+      '#submit' => array([$this, 'Cancel']),
+    );
+    $form['delete'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+      '#submit' => array([$this, 'delete']),
     );
     return $form;
   }
@@ -135,13 +140,383 @@ class reposi_gstype extends FormBase {
     $form_state->setRedirect('reposi.gspub');
   }
   function Save($form, &$form_state){
+    $uid=\Drupal::routeMatch()->getParameter('node');
+    $serch_p = db_select('reposi_publication', 'p');
+    $serch_p->fields('p')
+    ->condition('p.p_unde', $uid, '=');
+    $search_pub = $serch_p->execute()->fetchAssoc();
+    $p_pid_scholar=$search_pub['p_pid_scholar'];
+    $p_uid=$search_pub['p_uid'];
+    $p_title=$search_pub['p_title'];
+    $p_year=$search_pub['p_year'];
+    $selection=$form_state->getValue('type_publication');
+
+    if ($selection=='0') {
+      $serch_rp = db_select('reposi_publication', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.p_type', 'Article', '=')
+      ->condition('rp.p_title', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the article already exists. To import you must delete the existing article','error');
+      }
+      else {
+
+        db_insert('reposi_article_book')->fields(array(
+          'ab_type'              => 'Article',
+          'ab_title'             => $p_title,
+        ))->execute();
+
+        $search_art = db_select('reposi_article_book', 'ab');
+        $search_art->fields('ab')
+        ->condition('ab.ab_type', 'Article', '=')
+        ->condition('ab.ab_title', $p_title, '=');
+        $art_id = $search_art->execute()->fetchField();
+
+        db_insert('reposi_date')->fields(array(
+          'd_year' => $p_year,
+          'd_abid' => $art_id,
+        ))->execute();
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Article',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_abid'  => $art_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_abid'  => $art_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    }elseif ($selection=='1') {
+      $serch_rp = db_select('reposi_publication', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.p_type', 'Book', '=')
+      ->condition('rp.p_title', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the book already exists. To import you must delete the existing article','error');
+      }
+      else {
+
+        db_insert('reposi_article_book')->fields(array(
+          'ab_type'              => 'Book',
+          'ab_title'             => $p_title,
+        ))->execute();
+
+        $search_art = db_select('reposi_article_book', 'ab');
+        $search_art->fields('ab')
+        ->condition('ab.ab_type', 'Book', '=')
+        ->condition('ab.ab_title', $p_title, '=');
+        $book_id = $search_art->execute()->fetchField();
+
+        db_insert('reposi_date')->fields(array(
+          'd_year' => $p_year,
+          'd_abid' => $book_id,
+        ))->execute();
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Book',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_abid'  => $book_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_abid'  => $book_id,
+        ))->execute();
+        db_insert('reposi_article_book_detail')->fields(array(
+          'abd_abid'       => $book_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    }elseif ($selection=='2') {
+      $serch_rp = db_select('reposi_article_book', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.ab_type', 'Book Chapter', '=')
+      ->condition('rp.ab_title', 'without a book', '=')
+      ->condition('rp.ab_subtitle_chapter', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the Book Chapter already exists. To import you must delete the existing article','error');
+      }
+      else {
+
+        db_insert('reposi_article_book')->fields(array(
+          'ab_type'              => 'Book Chapter',
+          'ab_title'             => 'without a book',
+          'ab_subtitle_chapter'  => $p_title,
+        ))->execute();
+
+        $search_art = db_select('reposi_article_book', 'ab');
+        $search_art->fields('ab')
+        ->condition('ab.ab_type', 'Book Chapter', '=')
+        ->condition('ab.ab_title', 'without a book', '=')
+        ->condition('ab.ab_subtitle_chapter', $p_title, '=');
+        $chap_id = $search_art->execute()->fetchField();
+
+        db_insert('reposi_date')->fields(array(
+          'd_year' => $p_year,
+          'd_abid' => $chap_id,
+        ))->execute();
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Book Chapter',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_abid'  => $chap_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_abid'  => $chap_id,
+        ))->execute();
+        db_insert('reposi_article_book_detail')->fields(array(
+          'abd_abid'       => $chap_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    } elseif ($selection=='3') {
+      $serch_rp = db_select('reposi_confer_patent', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.cp_type', 'Conference', '=')
+      ->condition('rp.cp_title', 'without a conference', '=')
+      ->condition('rp.cp_publication', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the conference already exists. To import you must delete the existing article','error');
+      }
+      else {
+        db_insert('reposi_confer_patent')->fields(array(
+          'cp_type'       => 'Conference',
+          'cp_title'      => 'without a conference',
+          'cp_publication'=>  $p_title,
+        ))->execute();
+
+        $search_con = db_select('reposi_confer_patent', 'cp');
+        $search_con->fields('cp')
+        ->condition('cp.cp_type', 'Conference', '=')
+        ->condition('cp.cp_title', 'without a conference', '=')
+        ->condition('cp.cp_publication', $p_title, '=');
+        $con_id = $search_con->execute()->fetchField();
+        $conference_id = (int)$con_id;
+
+        db_insert('reposi_date')->fields(array(
+          'd_year'  => $p_year,
+          'd_cpid'  => $conference_id,
+        ))->execute();
+        db_insert('reposi_date')->fields(array(
+          'd_year'  => $p_year,
+          'd_cpid'  => $conference_id,
+        ))->execute();
+        db_insert('reposi_date')->fields(array(
+          'd_year'  => $p_year,
+          'd_cpid'  => $conference_id,
+        ))->execute();
+
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Conference',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_cpid'  => $conference_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_cpid'  => $conference_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    }elseif ($selection=='5') {
+      $serch_rp = db_select('reposi_confer_patent', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.cp_type', 'Patent', '=')
+      ->condition('rp.cp_title', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the Patent already exists. To import you must delete the existing Conferen','error');
+      }
+      else {
+        db_insert('reposi_confer_patent')->fields(array(
+          'cp_type'       => 'Patent',
+          'cp_title'      => $p_title,
+        ))->execute();
+
+        $search_pat = db_select('reposi_confer_patent', 'cp');
+        $search_pat->fields('cp')
+        ->condition('cp.cp_type', 'Patent', '=')
+        ->condition('cp.cp_title', $p_title, '=');
+        $pat_id = $search_pat->execute()->fetchField();
+        $patent_id = (int)$pat_id;
+
+        db_insert('reposi_date')->fields(array(
+          'd_year'  => $p_year,
+          'd_cpid'  => $patent_id,
+        ))->execute();
+
+
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Patent',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_cpid'  => $patent_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_cpid'  => $patent_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    }elseif ($selection=='4') {
+      $serch_rp = db_select('reposi_thesis_sw', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.ts_type', 'Thesis', '=')
+      ->condition('rp.ts_title', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the Thesis already exists. To import you must delete the existing Conferen','error');
+      }
+      else {
+        db_insert('reposi_thesis_sw')->fields(array(
+          'ts_type'       => 'Thesis',
+          'ts_title'      => $p_title,
+          'ts_degree'     => 'Unspecified',
+        ))->execute();
+
+        $search_the = db_select('reposi_thesis_sw', 'th');
+        $search_the->fields('th')
+        ->condition('th.ts_type', 'Thesis', '=')
+        ->condition('th.ts_title', $p_title, '=');
+        $the_id = $search_the->execute()->fetchField();
+        $thesis_id = (int)$the_id;
+
+        db_insert('reposi_date')->fields(array(
+          'd_year'  => $p_year,
+          'd_tsid'  => $thesis_id,
+        ))->execute();
+
+
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Thesis',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_tsid'  => $thesis_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_tsid'  => $thesis_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    }
+    elseif ($selection=='6') {
+      $serch_rp = db_select('reposi_thesis_sw', 'rp');
+      $serch_rp->fields('rp')
+      ->condition('rp.ts_type', 'Software', '=')
+      ->condition('rp.ts_title', $p_title, '=');
+      $search_pubc = $serch_rp->execute()->fetchAssoc();
+      if (!empty($search_pubc)) {
+        drupal_set_message('Error, the Thesis already exists. To import you must delete the existing Conferen','error');
+      }
+      else {
+        db_insert('reposi_thesis_sw')->fields(array(
+          'ts_type'       => 'Software',
+          'ts_title'      => $p_title,
+        ))->execute();
+
+        $search_sw = db_select('reposi_thesis_sw', 'sw');
+        $search_sw->fields('sw')
+        ->condition('sw.ts_type', 'Software', '=')
+        ->condition('sw.ts_title', $p_title, '=');
+        $softw_id = $search_sw->execute()->fetchField();
+        $sw_id = (int)$softw_id;
+
+        db_insert('reposi_date')->fields(array(
+          'd_year'  => $p_year,
+          'd_tsid'  => $sw_id,
+        ))->execute();
+
+
+        db_insert('reposi_publication')->fields(array(
+          'p_type'  => 'Software',
+          'p_source'=> 'Google Scholar',
+          'p_title' => $p_title,
+          'p_year'  => $p_year,
+          'p_check' => 1,
+          'p_tsid'  => $sw_id,
+        ))->execute();
+        $serch_p3 = db_select('reposi_publication_author', 'pa');
+        $serch_p3->fields('pa')
+        ->condition('pa.ap_unde', $uid, '=');
+        $search_pub_au = $serch_p3->execute()->fetchAssoc();
+        $pa_author=$search_pub_au['ap_author_id'];
+        db_insert('reposi_publication_author')->fields(array(
+          'ap_author_id'  => $pa_author,
+          'ap_tsid'  => $sw_id,
+        ))->execute();
+        drupal_set_message('Save successfull.');
+        reposidoc_scholar::delete_unde($uid);
+      }
+    }
+
     $form_state->setRedirect('reposi.gspub');
   }
 
-  public function validateForm(array &$form, FormStateInterface $form_state)
-  {
+  function delete($form, &$form_state){
+    $uid=\Drupal::routeMatch()->getParameter('node');
+    $form_state->setRedirect('reposi.deletegs', ['node' => $uid]);
+  }
+
+  public function validateForm(array &$form, FormStateInterface $form_state){
 
   }
+
 
   /**
   * {@inheritdoc}
@@ -241,8 +616,8 @@ class reposi_gstype extends FormBase {
         if ($functioncon==1) {
           $form_state->setRedirect('reposi.gspub');
         }else{
-        $form_state->setRedirect('reposi.Reposi_coninformation', ['node' => (int)$search_pub['p_cpid']]);
-      }
+          $form_state->setRedirect('reposi.Reposi_coninformation', ['node' => (int)$search_pub['p_cpid']]);
+        }
       }elseif ($selection=='4') {
         $serch_rp = db_select('reposi_publication', 'rp');
         $serch_rp->fields('rp')

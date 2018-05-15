@@ -40,6 +40,9 @@ function reposi_bibtex_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &
 		if ($form['body']['#markup'] <> '<p>No records</p>') {
  		    $each_publi=explode('</p>', $form['body']['#markup']);
                     $pid=$form['pid']['#value'];
+										if ((int)$pid<>0) {
+											# code...
+
 	  		foreach ($each_publi as $publi) {
 			  if (!empty($publi)) {
 		  		$publication[] = $publi . '<small>' . ', ' . \Drupal::l(t('BibTeX'), Url::fromRoute('reposi.reposi_bibtex.bibt_format',['node'=> $pid])) . '</small>';
@@ -50,6 +53,6 @@ function reposi_bibtex_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &
 	  		$new_publication = implode('</p>',$publication);
 			$form['body']['#markup'] = $new_publication;
 		}
-
+	}
 	}
 }

@@ -38,6 +38,14 @@ reposi.author:
   requirements:
     _permission: 'access content'
 
+reposi.authordesc:
+  path: 'reposi/author/desc'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\ReposiController::ListAuthordesc'
+    _title: 'Authors list'
+  requirements:
+    _permission: 'access content'
+
 
 ##################3andrea##########################################
 
@@ -372,10 +380,42 @@ reposi.Reposi_public_list:
   requirements:
     _permission: 'administer content'
 
+reposi.Reposi_public_listya:
+  path: 'reposi/listpub/ya'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publicationya'
+    _title: 'Publication list'
+  requirements:
+    _permission: 'administer content'
+
+reposi.Reposi_public_listta:
+  path: 'reposi/listpub/ta'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publicationta'
+    _title: 'Publication list'
+  requirements:
+    _permission: 'administer content'
+
+reposi.Reposi_public_listtd:
+  path: 'reposi/listpub/td'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_list_publicationtd'
+    _title: 'Publication list'
+  requirements:
+    _permission: 'administer content'
+
 reposi.Reposi_PubListComp:
   path: 'reposi/listpub/type'
   defaults:
     _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_publi_list_complete'
+    _title: 'Publication list by publication type'
+  requirements:
+    _permission: 'administer content'
+
+reposi.Reposi_PubListCompAS:
+  path: 'reposi/listpub/type/as'
+  defaults:
+    _controller: '\Drupal\reposi\Controller\Reposi_publi_list::reposi_publi_list_completeas'
     _title: 'Publication list by publication type'
   requirements:
     _permission: 'administer content'

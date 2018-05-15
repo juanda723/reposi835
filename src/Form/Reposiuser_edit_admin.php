@@ -162,7 +162,7 @@ class Reposiuser_edit_admin extends FormBase {
   $repet_u = strtolower($repet_user);
   $adm_fn = strtolower($adm_fname);
 
-	if (!valid_email_address($adm_email1)) 
+	if (!valid_email_address($adm_email1))
         {
         drupal_set_message(t('Email 1 is not a valid e-mail address.'),'error');
         }
@@ -170,7 +170,7 @@ class Reposiuser_edit_admin extends FormBase {
 	{
      		if (!empty($adm_email2) && !valid_email_address($adm_email2))
 		{
-   
+
     			drupal_set_message(t('Email 2 is not a valid e-mail address.'),'error');
     		}
 			else
@@ -178,7 +178,7 @@ class Reposiuser_edit_admin extends FormBase {
                         	if (!empty($adm_email3) && !valid_email_address($adm_email3))
 				{
   	  				drupal_set_message(t('Email 3 is not a valid e-mail address.'),'error');
-       				}     
+       				}
 
 				else{
     $search_mail = "SELECT u_email FROM {reposi_user} WHERE u_email = :u_email";
@@ -188,7 +188,7 @@ class Reposiuser_edit_admin extends FormBase {
     }
   }
   }
-  
+
 
   /**
    * {@inheritdoc}

@@ -31,7 +31,7 @@ class reposi_info_thessoft extends FormBase {
       $idpub = $info_publi['p_type'];
       if ($idpub=='Thesis') {
         $hola=Reposi_info_publication::reposi_info_thesis_free();
-      }elseif ($idpub=='Software') {
+      }else {
         $hola=Reposi_info_publication::reposi_info_sw_free();
       }
       $form['body'] = array($hola);

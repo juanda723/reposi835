@@ -6,6 +6,22 @@ reposi.reposi_apiscopus.docs_scopus:
   requirements:
     _permission: 'administrator'
 
+reposi.reposi_apiscopus.list_scopus:
+  path: 'reposi/list_scopus'
+  defaults:
+    _controller: 'Drupal\reposi_apiscopus\Controller\reposilist_scopus::reposi_list_sourceSpasc'
+    _title: 'List Publications Scopus'
+  requirements:
+    _permission: 'administrator'
+
+reposi.reposi_apiscopus.list_scopusdes:
+  path: 'reposi/list_scopusdes'
+  defaults:
+    _controller: 'Drupal\reposi_apiscopus\Controller\reposilist_scopus::reposi_list_sourceSpdesc'
+    _title: 'List Publications Scopus'
+  requirements:
+    _permission: 'administrator'
+
 reposi.reposi_apiscopus.nodedocs_scopus:
   path: 'reposi/docs_scopus/3'
   defaults:

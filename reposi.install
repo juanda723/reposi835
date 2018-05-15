@@ -357,6 +357,36 @@ function reposi_schema() {
       ),
     'primary key' => array('cpid'),);
 
+    $schema['reposi_undefined_publication'] = array(
+      'fields' => array(
+        'upid' => array(
+          'type' => 'serial',
+          'size' => 'big',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'Undefined Publication ID',
+        ),
+        'up_pid_scholar' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+          'description' => 'Scholar Publication ID',
+        ),
+        'up_title' => array(
+          'type' => 'varchar',
+          'length' => '511',
+          'not null' => TRUE,
+          'description' => 'Publication Title',
+        ),
+        'up_year' => array(
+          'type' => 'int',
+          'not null' => TRUE,
+          'description' => '',
+        ),
+
+      ),
+    'primary key' => array('upid'),);
+
     $schema['reposi_author'] = array(
       'description' => 'Repository author data',
       'fields' => array(

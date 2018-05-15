@@ -23,31 +23,24 @@ class TestFormula extends FormBase {
   /**
    * {@inheritdoc}
    */
-public function buildForm(array $form, FormStateInterface $form_state) {        
+public function buildForm(array $form, FormStateInterface $form_state) {
 
     return $form;
-  }
-
-  public function buildForm(array $form, FormStateInterface $form_state) {
-
-    
   }
 
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) 
+  public function validateForm(array &$form, FormStateInterface $form_state)
   {
-  
+
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
- 
+
   }
- 
+
 }
-
-

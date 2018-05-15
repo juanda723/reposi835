@@ -21,3 +21,9 @@ reposi.reposi_apischolar.listgs:
   route_name: reposi.gspub
   menu_name: tools
   parent: reposi.listpub
+
+reposi.reposi_apischolar.listpubgs:
+  title: 'Publication list import Google Scholar'
+  route_name: reposi.googlelistasc
+  menu_name: tools
+  parent: reposi.listpub

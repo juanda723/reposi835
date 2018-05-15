@@ -13,6 +13,12 @@ namespace Drupal\reposi_bibtex\Controller;
 
    function reposi_bibtex_format(){
      $id_publi = \Drupal::routeMatch()->getParameter('node');
+     if (((int)$id_publi)==0) {
+       $form['pid'] = array(
+         '#type' => 'value',
+         '#value' => 1,
+       );
+     }else{
      $form['pid'] = array(
        '#type' => 'value',
        '#value' => $id_publi,
@@ -524,6 +530,7 @@ namespace Drupal\reposi_bibtex\Controller;
    	$content .= '}';
      }
      $form['body'] = array('#markup' => $content);
+   }
      return $form;
    }
 

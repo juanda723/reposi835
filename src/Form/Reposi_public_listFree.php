@@ -47,6 +47,15 @@ class Reposi_public_listFree extends FormBase {
       $pub_type = $list_p->p_type;
       $pub_title = $list_p->p_title;
       $pub_year = $list_p->p_year;
+      $pub_source=$list_p->p_source;
+      if ($pub_source=='Google Scholar') {
+        $souce='(GS)';
+      }elseif($pub_source=='Manual') {
+        $souce='(Ma)';
+      }else {
+        $souce='(Sc)';
+      }
+
       $tsid = $list_p->p_tsid;
       $abid = $list_p->p_abid;
       if (isset($abid)) {
@@ -74,17 +83,17 @@ class Reposi_public_listFree extends FormBase {
         }
         if ($pub_type == 'Article') {
           $publications = $publications .'<p>'. $list_aut_abc.'(' . $pub_year . ') ' .'<b>'. \Drupal::l($pub_title,
-                          Url::fromRoute('reposi.Reposi_info_publicationAF',['node'=>$abid])) . '</b>' . '.' . '<br>' .
+                          Url::fromRoute('reposi.Reposi_info_publicationAF',['node'=>$abid])) . '</b>' .$souce. '.' . '<br>' .
                           '<small>' . t('Export formats: ') .
                           \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         } elseif ($list_p->p_type == 'Book'){
           $publications .= '<p>'. $list_aut_abc.'(' . $pub_year . ') ' .'<b>'. \Drupal::l($pub_title,
-                          Url::fromRoute('reposi.Reposi_info_publicationBF',['node'=>$abid])) . '</b>' . '.' . '<br>' .
+                          Url::fromRoute('reposi.Reposi_info_publicationBF',['node'=>$abid])) . '</b>' .$souce. '.' . '<br>' .
                           '<small>' . t('Export formats: ') .
                           \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         } else {
           $publications .= '<p>'. $list_aut_abc.'(' . $pub_year . ') ' .'<b>'.
-                          \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_info_publicationCBF',['node'=>$abid])) . '</b>' . '.' .
+                          \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_info_publicationCBF',['node'=>$abid])) . '</b>' .$souce. '.' .
                           '<br>' . '<small>' . t('Export formats: ') .
                           \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         }
@@ -112,12 +121,12 @@ class Reposi_public_listFree extends FormBase {
         }
         if ($pub_type == 'Thesis') {
           $publications .= '<p>'. $list_aut_ts. '(' . $pub_year . ') ' .'<b>'. \Drupal::l($pub_title,
-                          Url::fromRoute('reposi.Reposi_info_publicationTF',['node'=>$tsid])) . '</b>' . '.' . '<br>' .
+                          Url::fromRoute('reposi.Reposi_info_publicationTF',['node'=>$tsid])) . '</b>' .$souce. '.' . '<br>' .
                           '<small>' . t('Export formats: ') .
                           \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         } else {
           $publications .= '<p>'. $list_aut_ts. '(' . $pub_year . ') ' .'<b>'. \Drupal::l($pub_title,
-                          Url::fromRoute('reposi.Reposi_info_publicationSF',['node'=>$tsid])) . '</b>' . '.' . '<br>' .
+                          Url::fromRoute('reposi.Reposi_info_publicationSF',['node'=>$tsid])) . '</b>' .$souce. '.' . '<br>' .
                           '<small>' . t('Export formats: ') .
                           \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         }
@@ -147,11 +156,11 @@ class Reposi_public_listFree extends FormBase {
         if ($pub_type == 'Conference') {
           $publications .= '<p>'.$list_aut_cp . '(' . $pub_year . ') ' .'<b>'.
                           \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_info_publicationCF',['node'=>$cpid])) .
-                          '</b>' . '.' . '<br>' . '<small>' . t('Export formats: ') .
+                          '</b>' .$souce.'.' . '<br>' . '<small>' . t('Export formats: ') .
                           \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         } else {
           $publications .= '<p>'.$list_aut_cp . '(' . $pub_year . ') ' .'<b>'.
-                    \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_info_publicationPF',['node'=>$cpid])) . '</b>' .
+                    \Drupal::l($pub_title, Url::fromRoute('reposi.Reposi_info_publicationPF',['node'=>$cpid])) . '</b>' .$souce.
                     '.' . '<br>' . '<small>' . t('Export formats: ') .
                     \Drupal::l(t('RIS'), Url::fromRoute('reposi.reposi_format_ris',['node'=> $list_p->pid])) . '</small>' . '</p>';
         }

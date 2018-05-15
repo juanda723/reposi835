@@ -22,7 +22,7 @@ class Reposi_useredit_form extends ConfirmFormBase{
      */
     public function getQuestion() {
 
-       return t('Edit user confirmation'); 
+       return t('Edit user confirmation');
     }
 
     /**
@@ -48,18 +48,20 @@ class Reposi_useredit_form extends ConfirmFormBase{
 	$u_optional_email_2 = \Drupal::request()->query->get('u_optional_email_2');
 	$u_id_homonymous = \Drupal::request()->query->get('u_id_homonymous');
 	$u_id_scopus = \Drupal::request()->query->get('u_id_scopus');
+  $u_id_scholar = \Drupal::request()->query->get('u_id_scholar');
         $u_adm_aca_type = \Drupal::request()->query->get('u_adm_aca_type');
 
-       return $description =t('Do you want update this information?') . 
+       return $description =t('Do you want update this information?') .
                       '<div>'. t('New user information: ') . '</div>' . '<ul>' .
-                      '<li>'. t('Name(s):   ') . $u_first_name . ' ' . $u_second_name .'</li>' . 
+                      '<li>'. t('Name(s):   ') . $u_first_name . ' ' . $u_second_name .'</li>' .
                       '<li>'. t('Last name(s): ') . $u_first_lastname . ' ' . $u_second_lastname .'</li>' .
                       '<li>'. t('Email 1:   ') . $u_email .'</li>' .
                       '<li>'. t('Email 2:   ') . $u_optional_email_1 .'</li>' .
                       '<li>'. t('Email 3:   ') . $u_optional_email_2 .'</li>' .
                       '<li>'. t('ORCID: ') . $u_id_homonymous .'</li>' .
                       '<li>'. t('Scopus ID Author: ') . $u_id_scopus .'</li>' .
-                      '<li>'. t('Academic rol: ') . $u_adm_aca_type .'</li>' . '</ul>'; 
+                      '<li>'. t('Google Sholar ID Author') . $u_id_scholar .'</li>' .
+                      '<li>'. t('Academic rol: ') . $u_adm_aca_type .'</li>' . '</ul>';
        // $u_first_name = \Drupal::request()->query->get('u_first_name');
         $id=$this->id;
         $serch_u = db_select('reposi_user', 'u');
@@ -113,6 +115,7 @@ class Reposi_useredit_form extends ConfirmFormBase{
 	$new_email3 = \Drupal::request()->query->get('u_optional_email_2');
 	$adm_homo = \Drupal::request()->query->get('u_id_homonymous');
 	$adm_scopus = \Drupal::request()->query->get('u_id_scopus');
+  $adm_scholar = \Drupal::request()->query->get('u_id_scholar');
         $adm_aca_type = \Drupal::request()->query->get('u_adm_aca_type');
 
     db_update('reposi_user')->fields(array(
@@ -125,9 +128,10 @@ class Reposi_useredit_form extends ConfirmFormBase{
       'u_optional_email_2'=> $new_email3,
       'u_id_homonymous'   => $adm_homo,
       'u_id_scopus'       => $adm_scopus,
+      'u_id_scholar'       => $adm_scholar,
     ))->condition('uid', $uid)
     ->execute();
-    db_update('reposi_academic')->fields(array(   
+    db_update('reposi_academic')->fields(array(
       'academic_type' => $adm_aca_type,
     ))->condition('academic_uid', $uid)
     ->execute();

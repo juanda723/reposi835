@@ -34,7 +34,31 @@ reposi.gspub:
   path: 'reposi/listgs'
   defaults:
     _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_listgs'
-    _title: 'Scholar List'
+    _title: 'Undefined Publications Google Scholar List'
+  requirements:
+    _permission: 'administrator'
+
+reposi.gspubya:
+  path: 'reposi/listgs/year_asc'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_listgs_yearasc'
+    _title: 'Undefined Publications Google Scholar List'
+  requirements:
+    _permission: 'administrator'
+
+reposi.gspubta:
+  path: 'reposi/listgs/title_asc'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_listgs_titleasc'
+    _title: 'Undefined Publications Google Scholar List'
+  requirements:
+    _permission: 'administrator'
+
+reposi.gspubtd:
+  path: 'reposi/listgs/title_desc'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_listgs_titledesc'
+    _title: 'Undefined Publications Google Scholar List'
   requirements:
     _permission: 'administrator'
 
@@ -49,7 +73,33 @@ reposi.define_typePublicationGS:
 reposi.testfunt:
   path: 'reposi/testgs'
   defaults:
-    _controller: '\Drupal\reposi_apischolar\Controller\reposidoc_scholar::pubscolar_pat'
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_list_sourceGs'
     _title: 'Scholar Test'
+  requirements:
+    _permission: 'administrator'
+
+reposi.googlelistasc:
+  path: 'reposi/googlelistasc'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_list_sourceGs'
+    _title: 'List Google Scholar'
+  requirements:
+    _permission: 'administrator'
+
+reposi.googlelistdesc:
+  path: 'reposi/googlelistdesc'
+  defaults:
+    _controller: '\Drupal\reposi_apischolar\Controller\reposi_pubgs::reposi_list_sourceGsdes'
+    _title: 'List Google Scholar'
+  requirements:
+    _permission: 'administrator'
+
+
+
+reposi.deletegs:
+  path: 'reposi/delete/undefined/{node}'
+  defaults:
+    _form: '\Drupal\reposi_apischolar\Form\reposi_deleteunde'
+    _title: 'Delete Publication  Google Scholar'
   requirements:
     _permission: 'administrator'
