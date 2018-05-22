@@ -20,6 +20,7 @@ public static function docs_scholar(){
 
 	$config = \Drupal::config('system.maintenance');
 	$query_size = $config->get('query_scholar_size');
+	$gs_api_url = $config->get('google_scholar_api_url');
 	if (isset($query_size)) {
 		if ($query_size == 0){
 			$query_size_scholar = '010';
@@ -61,7 +62,7 @@ public static function docs_scholar(){
 	global $count;
 	for($i=1; $i<count($scholar_user_id); $i++){
 		if(!empty($scholar_user_id[$i])) {
-			$search_doc[$i] = 'http://localhost/apiGS/getallpublication.php?user='.$scholar_user_id[$i].$query_size_scholar;
+			$search_doc[$i] = $gs_api_url.'/getallpublication.php?user='.$scholar_user_id[$i].$query_size_scholar;
 			$data[$i]= file_get_contents($search_doc[$i]);
 			$decoded[$i] = array('scholar_user_id' => $scholar_user_id[$i], 'data'=>Json::decode($data[$i]));
 			$publications_total[$i]=count($decoded[$i]['data']['publications']);
@@ -86,9 +87,7 @@ public static function docs_scholar(){
 				$find_something = $find_pub->rowCount();
 				if ($find_something == '0'){
 				$publications_count = 1+$count++;
-                       // 	$form['doc'][$p] = array('#markup' => '<br><strong> ['.$i.']'.$scholar_doc_title[$i].'</strong>, '.
-			//		           $scholar_doc_authors[$i].', <strong>'.$scholar_doc_year[$i].'</strong></br>');
-
+ 
 					db_insert('reposi_undefined_publication')->fields(array(
       						'up_title'	=> $scholar_doc_title[$i],
       						'up_year'	=> $scholar_doc_year[$i],
@@ -136,8 +135,6 @@ public static function docs_scholar(){
   					if (!in_array($scholar_id[$i], $db_id)) {
 
 					$publications_count = 1+$count++;
-                    		//	$form['doc'][$i][$p] = array('#markup' => '<br><strong>['.$i.'] '.$scholar_doc_title[$i]
-				//	.'</strong>, '.$scholar_doc_authors[$i].', <strong>'.$scholar_doc_year[$i].'</strong></br>');
 
  					db_insert('reposi_undefined_publication')->fields(array(
       						'up_title'	=> $scholar_doc_title[$i],
@@ -199,7 +196,7 @@ function reposi_author_scholar(){
 	$apikey_query_final = $config->get('query_scholar_final');
         
 	/*****************************************
-	Info dinámica de un autor por nombre
+	ANDREA AUTHOR SCHOLAR SIN  ACTUALIZAR
 	*****************************************/
 		$search_author_state = db_select('reposi_state', 's');
 		$search_author_state->fields('s', array('s_uid'))
@@ -307,25 +304,5 @@ function reposi_author_scholar(){
 	
 }
 
-///////
-/*
-  public static function testdocs_scopus(){
-    $search_publi = db_select('reposi_user','p');
-    $arg=3;
-    $search_publi->fields('p',array('u_id_scopus'))
-                 ->condition('uid',$arg, '=');
-    $idscopus = $search_publi->execute()->fetchField();
-    $pre=$idscopus;
-    $numeromas =88;
-    $idscopus=$idscopus.$numeromas;
-      db_update('reposi_user')->fields(array(
-        'u_id_scopus'  => $idscopus,
-      ))->condition('uid', $arg)
-      ->execute();
-      $message = '<p>' . '<b>' . '<big>' . 'Hola prueba que cambio. ' .$pre.'</big>'.'</b>'.'</p>'.$idscopus;
-  		$form['message'] = array('#markup' => $message);
-      return $form;
-}
-*/
 //End class
 }
